@@ -28,5 +28,5 @@ flowchart TD
 - 数据流：输入为 `WDAConfig` 或默认端口；经过 `checkWDAPreparation` 检查、`isWDARunning` 网络请求；输出为状态更新与异常提示。
 
 # 跨文件调用关系
-- 本文件调用：使用 `BaseServiceManager` 继承基础能力，调用 `@midscene/shared/logger` 获取调试日志；使用 `DEFAULT_WDA_PORT` 常量；内部使用 `fetch` 检查 `/status`。
+- 本文件调用：调用 `@midscene/shared/logger` 获取调试日志，使用 `BaseServiceManager` 继承基础能力，依赖 `DEFAULT_WDA_PORT` 常量并通过 `fetch` 检查 `/status`。
 - 被调用场景：`src/index.ts` 导出 `WDAManager` 与 `WDAConfig` 类型供外部管理 iOS WebDriverAgent 服务；上层客户端可通过 `WDAManager.getInstance` 控制服务生命周期。

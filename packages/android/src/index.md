@@ -18,4 +18,4 @@ flowchart TD
 
 # 跨文件调用关系
 - 本文件调用：引用同目录下 `device.ts`、`agent.ts`、`utils.ts` 以及 `@midscene/shared/env`。
-- 被调用场景：其他包使用 `@midscene/android` 时通过此入口获取所有能力；`core` 或 `cli` 在运行 Android 自动化时依赖这些导出。 
+- 被调用场景：其他包使用 `@midscene/android` 时通过此入口获取所有能力；`core` 或 `cli` 在运行 Android 自动化时依赖这些导出。
