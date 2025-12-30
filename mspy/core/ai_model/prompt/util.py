@@ -23,6 +23,22 @@ def describe_size(size: Any) -> str:
     return "Unknown size"
 
 
+def _get_attr(obj: Any, name: str, default: Any = None) -> Any:
+    """Get attribute from object or dict
+    
+    Args:
+        obj: Object or dict
+        name: Attribute name
+        default: Default value if not found
+        
+    Returns:
+        Attribute value
+    """
+    if isinstance(obj, dict):
+        return obj.get(name, default)
+    return getattr(obj, name, default)
+
+
 def describe_element(elements: list) -> str:
     """Describe elements for prompts
     
@@ -36,14 +52,14 @@ def describe_element(elements: list) -> str:
     descriptions = []
     
     for item in elements:
-        element_id = getattr(item, 'id', item.get('id', '')) if isinstance(item, dict) else item.id
-        rect = getattr(item, 'rect', item.get('rect', {})) if isinstance(item, dict) else item.rect
-        content = getattr(item, 'content', item.get('content', '')) if isinstance(item, dict) else item.content
+        element_id = _get_attr(item, 'id', '')
+        rect = _get_attr(item, 'rect', {})
+        content = _get_attr(item, 'content', '')
         
-        left = rect.left if hasattr(rect, 'left') else rect.get('left', 0)
-        top = rect.top if hasattr(rect, 'top') else rect.get('top', 0)
-        width = rect.width if hasattr(rect, 'width') else rect.get('width', 0)
-        height = rect.height if hasattr(rect, 'height') else rect.get('height', 0)
+        left = _get_attr(rect, 'left', 0)
+        top = _get_attr(rect, 'top', 0)
+        width = _get_attr(rect, 'width', 0)
+        height = _get_attr(rect, 'height', 0)
         
         truncated_content = content[:slice_length] + '...' if len(content) > slice_length else content
         

@@ -135,9 +135,8 @@ Return in JSON format:
       "type": string, // the type of the action
       "param"?: {{ // The parameter of the action, if any
          // k-v style parameter fields
-      }}, 
+      }}
     }} | null,
-  ,
   "sleep"?: number, // The sleep time after the action, in milliseconds.
 }}
 

@@ -18,6 +18,9 @@ debug = get_debug('ai:service-caller')
 
 T = TypeVar('T')
 
+# Default timeout in seconds for AI model calls
+DEFAULT_TIMEOUT_SECONDS = 120
+
 
 def build_vision_message(
     system_prompt: str,
@@ -86,7 +89,7 @@ async def call_ai(
         client = openai.OpenAI(
             api_key=model_config.openai_api_key,
             base_url=model_config.openai_base_url,
-            timeout=model_config.timeout / 1000 if model_config.timeout else 120,
+            timeout=model_config.timeout / 1000 if model_config.timeout else DEFAULT_TIMEOUT_SECONDS,
         )
         
         # 准备请求参数
@@ -128,7 +131,7 @@ async def call_ai(
         return {
             'content': '{}',
             'usage': AIUsageInfo(
-                model_name=model_config.model_name if model_config else 'unknown',
+                model_name=model_config.model_name,
             ),
         }
     except Exception as e:
