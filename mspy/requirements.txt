@@ -1,0 +1,20 @@
+# Midscene Python SDK 依赖
+
+# 核心依赖
+playwright>=1.40.0
+pyyaml>=6.0
+
+# OpenAI API调用
+openai>=1.0.0
+
+# 图像处理
+pillow>=10.0.0
+
+# 工具库
+python-dotenv>=1.0.0
+
+# 开发依赖（可选）
+# pytest>=7.0.0
+# pytest-asyncio>=0.21.0
+# black>=23.0.0
+# mypy>=1.0.0
