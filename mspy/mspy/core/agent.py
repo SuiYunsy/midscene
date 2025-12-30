@@ -67,7 +67,7 @@ class Agent:
                 return ActionResult(ok=True, payload=path)
             else:
                 return ActionResult(ok=False, detail=f"未知动作: {request.name}")
-        except Exception as exc:  # noqa: BLE001
+        except (AssertionError, TimeoutError, ValueError, RuntimeError) as exc:
             return ActionResult(ok=False, detail=str(exc))
 
         return ActionResult(ok=True)

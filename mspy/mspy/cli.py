@@ -1,8 +1,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional
-
 import typer
 from rich.console import Console
 
@@ -46,21 +44,25 @@ def run_with_pytest(yaml_path: str, headless: bool = True) -> None:
         typer.echo("需要安装 pytest：pip install pytest")
         raise typer.Exit(code=1)
 
+    import tempfile
+
     script = Path(yaml_path).resolve()
 
-    def _pytest_adapter() -> None:
-        runner = YamlScriptRunner(config=RuntimeConfig(headless=headless))
-        report = runner.run(script)
-        assert report.result.status == "done", report.result
+    with tempfile.TemporaryDirectory() as tmpdir:
+        test_file = Path(tmpdir) / "test_yaml.py"
+        content = f"""
+import pathlib
+from mspy.core.yaml_runner import YamlScriptRunner
+from mspy.shared.config import RuntimeConfig
 
-    # 动态注册一个临时测试函数
-    def test_yaml() -> None:  # type: ignore
-        _pytest_adapter()
 
-    # 将动态生成的用例注入到模块级别，便于 pytest 发现
-    globals()["test_yaml"] = test_yaml
-
-    raise SystemExit(pytest.main([__file__]))
+def test_yaml_script():
+    runner = YamlScriptRunner(config=RuntimeConfig(headless={headless}))
+    report = runner.run(pathlib.Path({repr(str(script))}))
+    assert report.result.status == "done"
+"""
+        test_file.write_text(content.strip() + "\n", encoding="utf-8")
+        raise SystemExit(pytest.main([str(test_file)]))
 
 
 def main() -> None:

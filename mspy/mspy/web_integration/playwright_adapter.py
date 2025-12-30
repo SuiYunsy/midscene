@@ -33,7 +33,7 @@ class PlaywrightInterface:
     def __enter__(self) -> "PlaywrightInterface":
         try:
             from playwright.sync_api import sync_playwright  # type: ignore
-        except Exception as exc:  # noqa: BLE001
+        except (ImportError, ModuleNotFoundError) as exc:
             raise ImportError(
                 "需要安装 playwright 才能使用 web-integration：pip install playwright && playwright install"
             ) from exc
