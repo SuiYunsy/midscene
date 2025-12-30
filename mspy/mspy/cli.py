@@ -39,7 +39,8 @@ def run_with_pytest(yaml_path: str, headless: bool = True) -> None:
     """
 
     try:
-        import pytest  # noqa: WPS433
+        # 延迟引入可选依赖，避免未安装 pytest 时阻塞 CLI 的其他功能
+        import pytest
     except ImportError:
         typer.echo("需要安装 pytest：pip install pytest")
         raise typer.Exit(code=1)

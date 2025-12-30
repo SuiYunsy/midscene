@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional
 from pathlib import Path
+from types import TracebackType
 
 from mspy.shared.config import RuntimeConfig
 from mspy.shared.logger import get_logger
@@ -51,13 +52,19 @@ class PlaywrightInterface:
             self.navigate(self.config.base_url)
         return self
 
-    def __exit__(self, exc_type, exc, tb) -> None:  # type: ignore[override]
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> bool | None:
         if self._context:
             self._context.close()
         if self._browser:
             self._browser.close()
         if self._play:
             self._play.stop()
+        return None
 
     # === 动作实现 ===
     def navigate(self, url: str) -> None:

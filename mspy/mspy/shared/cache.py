@@ -23,6 +23,8 @@ class InMemoryCache:
         self._store: Dict[str, CacheEntry] = {}
 
     def set(self, key: str, value: Any, ttl_seconds: Optional[int] = None) -> None:
+        if ttl_seconds is not None and ttl_seconds <= 0:
+            raise ValueError("ttl_seconds 必须为正数")
         expire_at = time.time() + ttl_seconds if ttl_seconds else None
         self._store[key] = CacheEntry(value=value, expire_at=expire_at)
 

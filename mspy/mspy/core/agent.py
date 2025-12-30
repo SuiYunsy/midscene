@@ -20,7 +20,7 @@ class AbstractInterface(Protocol):
     def expect_text(self, selector: str, contains: str, timeout: int | None = None) -> None: ...
     def evaluate(self, script: str) -> Any: ...
     def sleep(self, ms: int) -> None: ...
-    def screenshot(self, title: str | None = None) -> str | None: ...
+    def screenshot(self, title: str | None = None) -> str: ...
 
 
 @dataclass
@@ -41,6 +41,12 @@ class Agent:
         self.reporter = options.reporter
         self.logger = get_logger("mspy.agent")
 
+    @staticmethod
+    def _require_param(params: Dict[str, Any], key: str) -> Any:
+        if key not in params:
+            raise ValueError(f"缺少必填参数: {key}")
+        return params[key]
+
     def call_action(self, request: ActionRequest) -> ActionResult:
         name = request.name.lower()
         params = request.params or {}
@@ -53,19 +59,23 @@ class Agent:
 
         try:
             if name in {"navigate", "goto"}:
-                self.interface.navigate(require("url"))
+                self.interface.navigate(self._require_param(params, "url"))
             elif name in {"click", "tap"}:
-                self.interface.click(require("selector"))
+                self.interface.click(self._require_param(params, "selector"))
             elif name in {"input", "fill"}:
-                self.interface.input(require("selector"), str(params.get("text", "")))
+                self.interface.input(
+                    self._require_param(params, "selector"), str(params.get("text", ""))
+                )
             elif name in {"expect", "assert"}:
                 self.interface.expect_text(
-                    require("selector"), require("contains"), params.get("timeout")
+                    self._require_param(params, "selector"),
+                    self._require_param(params, "contains"),
+                    params.get("timeout"),
                 )
             elif name in {"sleep", "wait"}:
                 self.interface.sleep(int(params.get("ms", params.get("timeout", 0))))
             elif name in {"evaluate", "javascript"}:
-                payload = self.interface.evaluate(require("script"))
+                payload = self.interface.evaluate(self._require_param(params, "script"))
                 return ActionResult(ok=True, payload=payload)
             elif name in {"screenshot", "capture"}:
                 path = self.interface.screenshot(params.get("title"))
