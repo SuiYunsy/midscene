@@ -9,7 +9,7 @@ class ActionRequest:
     """动作调用请求，抽象 TS 版 AbstractInterface。"""
 
     name: str
-    params: Dict[str, Any]
+    params: Dict[str, Any] | None = None
 
 
 @dataclass

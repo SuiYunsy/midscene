@@ -46,21 +46,26 @@ class Agent:
         params = request.params or {}
         self.logger.debug(f"call_action: {name} params={params}")
 
+        def require(key: str) -> Any:
+            if key not in params:
+                raise ValueError(f"缺少必填参数: {key}")
+            return params[key]
+
         try:
             if name in {"navigate", "goto"}:
-                self.interface.navigate(params["url"])
+                self.interface.navigate(require("url"))
             elif name in {"click", "tap"}:
-                self.interface.click(params["selector"])
+                self.interface.click(require("selector"))
             elif name in {"input", "fill"}:
-                self.interface.input(params["selector"], str(params.get("text", "")))
+                self.interface.input(require("selector"), str(params.get("text", "")))
             elif name in {"expect", "assert"}:
                 self.interface.expect_text(
-                    params["selector"], params["contains"], params.get("timeout")
+                    require("selector"), require("contains"), params.get("timeout")
                 )
             elif name in {"sleep", "wait"}:
                 self.interface.sleep(int(params.get("ms", params.get("timeout", 0))))
             elif name in {"evaluate", "javascript"}:
-                payload = self.interface.evaluate(params["script"])
+                payload = self.interface.evaluate(require("script"))
                 return ActionResult(ok=True, payload=payload)
             elif name in {"screenshot", "capture"}:
                 path = self.interface.screenshot(params.get("title"))
