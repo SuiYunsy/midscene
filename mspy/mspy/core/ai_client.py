@@ -29,21 +29,23 @@ class AIClient:
     def chat_json(self, messages: List[Dict[str, Any]]) -> Dict[str, Any]:
         """调用模型并解析 JSON 响应。"""
         logger.info("Calling model %s with %d message(s)", self.config.model, len(messages))
-        response = self.client.responses.create(
+        response = self.client.chat.completions.create(
             model=self.config.model,
-            input=messages,
+            messages=messages,
             response_format={"type": "json_object"},
             temperature=self.config.temperature,
         )
-        content = response.output_text
+        choice = response.choices[0].message
+        content = choice.content or "{}"
         logger.debug("Raw model response: %s", content)
         return json.loads(content)
 
     def chat_text(self, messages: List[Dict[str, Any]]) -> str:
         logger.info("Calling model %s for text output", self.config.model)
-        response = self.client.responses.create(
+        response = self.client.chat.completions.create(
             model=self.config.model,
-            input=messages,
+            messages=messages,
             temperature=self.config.temperature,
         )
-        return response.output_text
+        choice = response.choices[0].message
+        return choice.content or ""

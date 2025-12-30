@@ -96,7 +96,11 @@ class PlaywrightRunner:
         if mode == "clear":
             target.fill("")
         elif mode == "append":
-            target.type(str(value))
+            try:
+                existing = target.input_value()
+            except Exception:
+                existing = ""
+            target.fill(f"{existing}{value}")
         else:
             target.fill(str(value))
 
