@@ -22,6 +22,6 @@ class RuntimeConfig:
         if not override:
             return self
         merged = {**self.__dict__, **override}
-        merged_extra = {**self.extra, **override.get("extra", {})} if override else self.extra
+        merged_extra = {**self.extra, **(override.get("extra", {}) or {})}
         merged["extra"] = merged_extra
         return RuntimeConfig(**merged)

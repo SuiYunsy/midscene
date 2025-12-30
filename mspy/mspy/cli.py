@@ -54,11 +54,13 @@ def run_with_pytest(yaml_path: str, headless: bool = True) -> None:
         assert report.result.status == "done", report.result
 
     # 动态注册一个临时测试函数
-    @pytest.mark.parametrize("case", [str(script)])
-    def test_yaml(case: str) -> None:  # type: ignore
+    def test_yaml() -> None:  # type: ignore
         _pytest_adapter()
 
-    raise SystemExit(pytest.main(["-k", script.name, __file__]))
+    # 将动态生成的用例注入到模块级别，便于 pytest 发现
+    globals()["test_yaml"] = test_yaml
+
+    raise SystemExit(pytest.main([__file__]))
 
 
 def main() -> None:
