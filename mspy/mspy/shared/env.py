@@ -16,7 +16,7 @@ def _find_repo_root() -> Path:
     for parent in current.parents:
         if (parent / ".git").exists() or (parent / "pnpm-workspace.yaml").exists():
             return parent
-    return current.parent
+    raise RuntimeError("Failed to locate repository root; set MSPY_ENV_PATH to override.")
 
 
 # 默认使用仓库根目录下的 .env，可通过环境变量覆盖

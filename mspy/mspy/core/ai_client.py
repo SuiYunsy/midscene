@@ -35,7 +35,10 @@ class AIClient:
             response_format={"type": "json_object"},
             temperature=self.config.temperature,
         )
-        choice = response.choices[0].message
+        choices = getattr(response, "choices", [])
+        if not choices:
+            raise RuntimeError("Empty response from model.")
+        choice = choices[0].message
         content = choice.content or "{}"
         logger.debug("Raw model response: %s", content)
         return json.loads(content)
@@ -47,5 +50,8 @@ class AIClient:
             messages=messages,
             temperature=self.config.temperature,
         )
-        choice = response.choices[0].message
+        choices = getattr(response, "choices", [])
+        if not choices:
+            raise RuntimeError("Empty response from model.")
+        choice = choices[0].message
         return choice.content or ""

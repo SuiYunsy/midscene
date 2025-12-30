@@ -101,7 +101,10 @@ class PlaywrightRunner:
             else:
                 target = page.get_by_text(prompt, exact=False)
         if target is None:
-            target = page.locator("input,textarea").first
+            inputs = page.locator("input,textarea")
+            if inputs.count() == 0:
+                raise RuntimeError("No input or textarea element found for Input action.")
+            target = inputs.first
         mode = param.get("mode", "replace")
         if mode == "clear":
             target.fill("")
@@ -126,7 +129,8 @@ class PlaywrightRunner:
             logger.warning("AssertText missing 'text' param")
             return
         locator = page.get_by_text(text, exact=False)
-        assert locator.count() > 0, f"Text '{text}' not found"
+        if locator.count() == 0:
+            raise AssertionError(f"Text '{text}' not found")
         logger.info("Assertion passed: %s", text)
 
     def _apply_print_assert_result(self, param: Dict[str, Any]) -> None:
