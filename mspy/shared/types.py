@@ -24,21 +24,25 @@ class NodeType(str, Enum):
 @dataclass
 class Point:
     """坐标点"""
-    left: float
-    top: float
+    left: float = 0.0
+    top: float = 0.0
 
 
 @dataclass
 class Size:
     """尺寸"""
-    width: float  # 图像宽度（逻辑像素）
-    height: float  # 图像高度（逻辑像素）
+    width: float = 0.0  # 图像宽度（逻辑像素）
+    height: float = 0.0  # 图像高度（逻辑像素）
     dpr: Optional[float] = None  # 已弃用，请勿使用
 
 
 @dataclass
-class Rect(Point, Size):
+class Rect:
     """矩形区域"""
+    left: float = 0.0
+    top: float = 0.0
+    width: float = 0.0
+    height: float = 0.0
     zoom: Optional[float] = None
 
 
