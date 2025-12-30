@@ -24,7 +24,7 @@ class InMemoryCache:
 
     def set(self, key: str, value: Any, ttl_seconds: Optional[int] = None) -> None:
         if ttl_seconds is not None and ttl_seconds < 0:
-            raise ValueError("ttl_seconds must be greater than or equal to 0")
+            raise ValueError("ttl_seconds cannot be negative")
         expire_at = time.time() + ttl_seconds if ttl_seconds else None
         self._store[key] = CacheEntry(value=value, expire_at=expire_at)
 

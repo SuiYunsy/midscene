@@ -20,15 +20,15 @@ def run(yaml_path: str, headless: bool = True) -> None:
 
     path = Path(yaml_path)
     if not path.exists():
-        typer.echo(f"未找到文件: {yaml_path}")
+        typer.echo(f"File not found: {yaml_path}")
         raise typer.Exit(code=1)
 
     runner = YamlScriptRunner(config=RuntimeConfig(headless=headless))
     report = runner.run(path)
     if report.result.output_path:
-        console.print(f"[green]完成[/green] 报告: {report.result.output_path}")
+        console.print(f"[green]Done[/green] Report: {report.result.output_path}")
     else:
-        console.print("[green]完成[/green]")
+        console.print("[green]Done[/green]")
 
 
 @app.command("pytest")
@@ -42,7 +42,7 @@ def run_with_pytest(yaml_path: str, headless: bool = True) -> None:
         # 延迟引入可选依赖，避免未安装 pytest 时阻塞 CLI 的其他功能
         import pytest
     except ImportError:
-        typer.echo("需要安装 pytest：pip install pytest")
+        typer.echo("pytest is required: pip install pytest")
         raise typer.Exit(code=1)
 
     import tempfile

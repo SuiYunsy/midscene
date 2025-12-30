@@ -12,7 +12,7 @@ from mspy.shared.config import RuntimeConfig
 
 @pytest.mark.skipif(
     bool(os.environ.get("MSPY_SKIP_E2E")),
-    reason="设置 MSPY_SKIP_E2E=1 可跳过浏览器依赖",
+    reason="Set MSPY_SKIP_E2E=1 to skip browser dependency",
 )
 def test_basic_yaml():
     runner = YamlScriptRunner(config=RuntimeConfig(headless=True))

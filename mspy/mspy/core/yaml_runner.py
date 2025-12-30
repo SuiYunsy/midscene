@@ -46,7 +46,7 @@ class YamlScriptRunner:
             for task in tasks:
                 flow = task.get("flow") or []
                 if not flow:
-                    self.logger.warning("任务缺少 flow，跳过")
+                    self.logger.warning("Skip task because `flow` is empty")
                     continue
                 agent.run_flow(flow)
 
