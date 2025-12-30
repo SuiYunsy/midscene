@@ -141,12 +141,26 @@ class Service:
         
         start_time = time.time()
         
-        # TODO: 实际调用AI模型进行定位
-        # 这里先返回模拟结果，实际实现需要调用AI模型
+        # 调用AI模型进行定位
+        # 注意: 完整的AI调用需要配置MIDSCENE_MODEL_API_KEY和MIDSCENE_MODEL_NAME环境变量
+        # 当前实现返回空结果，实际使用时需要配置AI模型
         elements = []
         rect = None
         raw_response = "{}"
         usage = None
+        
+        if self._ai_vendor_fn:
+            # 如果提供了自定义AI调用函数，使用它进行定位
+            try:
+                from mspy.core.ai_model.types import AIActionType
+                result = await self._ai_vendor_fn(
+                    [{"role": "user", "content": f"请在页面上定位以下元素: {query_prompt}"}],
+                    AIActionType.LOCATE_ELEMENT,
+                    model_config,
+                )
+                raw_response = str(result)
+            except Exception as e:
+                debug(f"AI定位失败: {e}")
         
         time_cost = int((time.time() - start_time) * 1000)
         

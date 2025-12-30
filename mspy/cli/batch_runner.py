@@ -241,7 +241,22 @@ class BatchRunner:
         Returns:
             合并后的脚本对象
         """
-        # 简单合并，实际实现需要更复杂的逻辑
+        from mspy.core.yaml.parser import MidsceneYamlScriptWebEnv
+        
+        # 合并Web配置
+        if 'web' in global_config and global_config['web']:
+            if script.web is None:
+                script.web = MidsceneYamlScriptWebEnv()
+            
+            web_config = global_config['web']
+            if isinstance(web_config, dict):
+                if 'url' in web_config and not script.web.url:
+                    script.web.url = web_config['url']
+                if 'headed' in web_config:
+                    script.web.headed = web_config['headed']
+                if 'viewport' in web_config and not script.web.viewport:
+                    script.web.viewport = web_config['viewport']
+        
         return script
     
     def _print_execution_plan(self) -> None:

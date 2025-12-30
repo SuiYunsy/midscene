@@ -202,9 +202,11 @@ class Agent(Generic[T]):
         if context:
             return context
         
-        # 如果接口没有提供上下文，需要自行构建
-        # TODO: 实现commonContextParser
-        raise NotImplementedError("接口未提供getContext方法")
+        # 如果接口没有提供上下文，自行构建基础上下文
+        from mspy.web.playwright.page import SimpleUIContext
+        screenshot = await self.interface.screenshot_base64()
+        size = await self.interface.size()
+        return SimpleUIContext(screenshot, size)
     
     async def get_action_space(self) -> List[DeviceAction]:
         """获取动作空间"""
@@ -672,8 +674,25 @@ class Agent(Generic[T]):
         Returns:
             执行结果
         """
-        # TODO: 实现YAML脚本解析和执行
-        return {'result': {}}
+        from mspy.core.yaml import parse_yaml_script, ScriptPlayer
+        
+        script = parse_yaml_script(yaml_script_content, 'yaml')
+        
+        async def agent_provider():
+            return {'agent': self, 'freeFn': []}
+        
+        player = ScriptPlayer(script, agent_provider)
+        await player.run()
+        
+        if player.status == 'error':
+            errors = [
+                f"任务 - {task.name}: {task.error}"
+                for task in player.task_status_list
+                if task.status.value == 'error' and task.error
+            ]
+            raise RuntimeError(f"运行YAML脚本时发生错误:\n{chr(10).join(errors)}")
+        
+        return {'result': player.result}
     
     async def evaluate_javascript(self, script: str) -> Any:
         """执行JavaScript
