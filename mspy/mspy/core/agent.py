@@ -52,11 +52,6 @@ class Agent:
         params = request.params or {}
         self.logger.debug(f"call_action: {name} params={params}")
 
-        def require(key: str) -> Any:
-            if key not in params:
-                raise ValueError(f"缺少必填参数: {key}")
-            return params[key]
-
         try:
             if name in {"navigate", "goto"}:
                 self.interface.navigate(self._require_param(params, "url"))
