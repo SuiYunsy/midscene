@@ -12,12 +12,13 @@ import uuid as uuid_lib
 
 class NodeType(str, Enum):
     """节点类型枚举"""
-    TEXT = "TEXT"
-    BUTTON = "BUTTON"
-    INPUT = "INPUT"
-    IMG = "IMG"
-    FORM_ITEM = "FORM_ITEM"
-    CONTAINER = "CONTAINER"
+    CONTAINER = "CONTAINER Node"
+    FORM_ITEM = "FORM_ITEM Node"
+    BUTTON = "BUTTON Node"
+    A = "Anchor Node"
+    IMG = "IMG Node"
+    TEXT = "TEXT Node"
+    POSITION = "POSITION Node"
 
 
 @dataclass

@@ -144,7 +144,8 @@ class Agent:
     def _ensure_vl_model_warning(self) -> None:
         """确保 VL 模型警告只显示一次"""
         if not self._has_warned_non_vl_model:
-            if self.interface.interface_type not in ("playwright", "puppeteer", "static"):
+            # Python 实现只支持 playwright 和 static
+            if self.interface.interface_type not in ("playwright", "static"):
                 self.model_config_manager.throw_error_if_non_vl_model()
                 self._has_warned_non_vl_model = True
     

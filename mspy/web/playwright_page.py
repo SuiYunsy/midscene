@@ -560,10 +560,9 @@ class PlaywrightWebPage(AbstractInterface):
             await self.mouse_click(element.center[0], element.center[1])
         
         if key_name:
-            # 处理组合键
-            keys = key_name.replace(" ", "").split("+")
-            for key in keys:
-                await self.keyboard_press(key)
+            # 处理组合键 - Playwright 支持 "Control+A" 格式
+            # 使用 Playwright 原生的组合键支持
+            await self._page.keyboard.press(key_name)
     
     async def _action_scroll(self, param: Dict[str, Any]) -> None:
         """执行滚动动作"""

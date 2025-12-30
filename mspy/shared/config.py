@@ -115,7 +115,8 @@ def model_family_to_vl_config(model_family: Optional[str]) -> Dict[str, Optional
     
     # 验证模型家族值（只支持 qwen3-vl 家族）
     if model_family not in MODEL_FAMILY_VALUES:
-        raise ValueError(f"Invalid MIDSCENE_MODEL_FAMILY value: {model_family}. Only qwen2.5-vl and qwen3-vl are supported.")
+        supported_values = ", ".join(MODEL_FAMILY_VALUES)
+        raise ValueError(f"Invalid MIDSCENE_MODEL_FAMILY value: {model_family}. Supported values: {supported_values}")
     
     return {"vl_mode": model_family}
 

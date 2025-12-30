@@ -21,7 +21,7 @@ debug_call = get_debug("ai:call")
 debug_profile_stats = get_debug("ai:profile:stats")
 
 
-async def create_chat_client(
+def create_chat_client(
     model_config: IModelConfig,
 ) -> Tuple[OpenAI, str, str, Optional[str]]:
     """
@@ -62,9 +62,9 @@ async def create_chat_client(
     
     client = OpenAI(**client_kwargs)
     
-    # 如果提供了自定义客户端工厂
+    # 如果提供了自定义客户端工厂（同步调用）
     if model_config.create_openai_client:
-        wrapped_client = await model_config.create_openai_client(client, client_kwargs)
+        wrapped_client = model_config.create_openai_client(client, client_kwargs)
         if wrapped_client:
             client = wrapped_client
     
@@ -99,11 +99,14 @@ def build_usage_info(
     if not usage_data:
         return None
     
+    # 验证 usage_data 是字典类型
+    if not isinstance(usage_data, dict):
+        return None
+    
     cached_input = None
-    if isinstance(usage_data, dict):
-        prompt_details = usage_data.get("prompt_tokens_details", {})
-        if isinstance(prompt_details, dict):
-            cached_input = prompt_details.get("cached_tokens")
+    prompt_details = usage_data.get("prompt_tokens_details", {})
+    if isinstance(prompt_details, dict):
+        cached_input = prompt_details.get("cached_tokens")
     
     return AIUsageInfo(
         prompt_tokens=usage_data.get("prompt_tokens"),
