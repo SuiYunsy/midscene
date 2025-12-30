@@ -57,13 +57,13 @@ def adapt_bbox_to_rect(
         right = int(xmax)
         bottom = int(ymax)
     
+    # 计算宽高（在添加偏移之前）
+    width = right - left
+    height = bottom - top
+    
     # 添加偏移
     left += offset_left
     top += offset_top
-    
-    # 计算宽高
-    width = right - xmin
-    height = bottom - ymin
     
     return Rect(
         left=max(0, left),

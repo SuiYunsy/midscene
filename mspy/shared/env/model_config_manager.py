@@ -232,7 +232,7 @@ def decide_model_config_from_intent_config(
         )
     
     if not result.model_name:
-        print(
+        debug_log(
             f"Warning: modelName is not set for intent {intent}, "
             "this may cause unexpected behavior. "
             "See https://midscenejs.com/model-strategy"
