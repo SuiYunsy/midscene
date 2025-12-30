@@ -10,10 +10,29 @@ from typing import Optional
 
 from dotenv import load_dotenv
 
-# 默认使用仓库根目录下的 .env
-_ROOT = Path(__file__).resolve().parents[3]
-_ENV_PATH = _ROOT / ".env"
-load_dotenv(_ENV_PATH)
+def _find_repo_root() -> Path:
+    """向上查找仓库根目录，避免硬编码层级。"""
+    current = Path(__file__).resolve()
+    for parent in current.parents:
+        if (parent / ".git").exists() or (parent / "pnpm-workspace.yaml").exists():
+            return parent
+    return current.parent
+
+
+# 默认使用仓库根目录下的 .env，可通过环境变量覆盖
+def _load_env_file() -> Path:
+    from os import getenv
+
+    override = getenv("MSPY_ENV_PATH")
+    if override:
+        env_path = Path(override).expanduser()
+    else:
+        env_path = _find_repo_root() / ".env"
+    load_dotenv(env_path)
+    return env_path
+
+
+_ENV_PATH = _load_env_file()
 
 
 @dataclass

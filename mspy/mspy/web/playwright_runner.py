@@ -58,6 +58,8 @@ class PlaywrightRunner:
             self._apply_scroll(page, param)
         elif action_type == "AssertText":
             self._apply_assert_text(page, param)
+        elif action_type == "Print_Assert_Result":
+            self._apply_print_assert_result(param)
         else:
             logger.warning("Unknown action type: %s", action_type)
 
@@ -91,7 +93,15 @@ class PlaywrightRunner:
         value = param.get("value", "")
         locate = param.get("locate") or {}
         prompt = locate.get("prompt")
-        target = page.get_by_placeholder(prompt) if prompt else page.locator("input,textarea").first
+        target = None
+        if prompt:
+            candidate = page.get_by_placeholder(prompt)
+            if candidate.count() > 0:
+                target = candidate
+            else:
+                target = page.get_by_text(prompt, exact=False)
+        if target is None:
+            target = page.locator("input,textarea").first
         mode = param.get("mode", "replace")
         if mode == "clear":
             target.fill("")
@@ -118,3 +128,9 @@ class PlaywrightRunner:
         locator = page.get_by_text(text, exact=False)
         assert locator.count() > 0, f"Text '{text}' not found"
         logger.info("Assertion passed: %s", text)
+
+    def _apply_print_assert_result(self, param: Dict[str, Any]) -> None:
+        success = param.get("success", True)
+        message = param.get("message", "")
+        level = logger.info if success else logger.error
+        level("Assert result: %s | %s", "success" if success else "failed", message)

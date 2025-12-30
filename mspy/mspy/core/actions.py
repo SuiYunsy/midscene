@@ -53,6 +53,11 @@ DEFAULT_ACTION_SPACE: List[DeviceAction] = [
         description="Assert the target text exists on screen",
         param_schema={"text": "string"},
     ),
+    DeviceAction(
+        name="Print_Assert_Result",
+        description="Report assertion conclusion to the user",
+        param_schema={"success": "boolean", "message": "string"},
+    ),
 ]
 
 
