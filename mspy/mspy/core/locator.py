@@ -18,11 +18,11 @@ def locate_element(ai_client, target: str, screenshot_base64: str) -> Dict[str, 
     messages: List[Dict[str, Any]] = [
         {"role": "system", "content": system_prompt_to_locate_element()},
         {
-          "role": "user",
-          "content": [
-            {"type": "text", "text": f"Find: {target}"},
-            {"type": "image_url", "image_url": {"url": screenshot_base64, "detail": "high"}},
-          ],
+            "role": "user",
+            "content": [
+                {"type": "text", "text": f"Find: {target}"},
+                {"type": "image_url", "image_url": {"url": screenshot_base64, "detail": "high"}},
+            ],
         },
     ]
     logger.info("Locating element for target: %s", target)
