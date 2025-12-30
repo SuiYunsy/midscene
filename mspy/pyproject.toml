@@ -1,0 +1,23 @@
+[project]
+name = "mspy"
+version = "0.1.0"
+description = "Midscene Python 移植：核心引擎、共享工具、Playwright 集成与 CLI"
+authors = [{ name = "midscene" }]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "pyyaml>=6.0",
+  "typer>=0.12",
+  "rich>=13.7",
+  "playwright>=1.49",
+]
+
+[project.scripts]
+mspy = "mspy.cli:app"
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[build-system]
+requires = ["setuptools>=65", "wheel"]
+build-backend = "setuptools.build_meta"

@@ -1,0 +1,11 @@
+target:
+  url: "https://example.org"
+
+tasks:
+  - name: "open-and-check"
+    flow:
+      - navigate:
+          url: "https://example.org"
+      - expect:
+          selector: "h1"
+          contains: "Example"
