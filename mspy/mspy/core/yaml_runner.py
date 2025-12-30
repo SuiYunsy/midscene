@@ -25,7 +25,7 @@ class YamlScriptRunner:
     def _load_tasks(self, script: Dict[str, Any]) -> List[Dict[str, Any]]:
         tasks = script.get("tasks") or []
         if not isinstance(tasks, list):
-            raise ValueError("tasks 必须是数组")
+            raise ValueError("`tasks` must be a list")
         return tasks
 
     def run(self, yaml_path: str | Path) -> ReportCollector:

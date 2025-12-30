@@ -44,7 +44,7 @@ class Agent:
     @staticmethod
     def _require_param(params: Dict[str, Any], key: str) -> Any:
         if key not in params:
-            raise ValueError(f"缺少必填参数: {key}")
+            raise ValueError(f"Missing required parameter: {key}")
         return params[key]
 
     def call_action(self, request: ActionRequest) -> ActionResult:
@@ -76,7 +76,7 @@ class Agent:
                 path = self.interface.screenshot(params.get("title"))
                 return ActionResult(ok=True, payload=path)
             else:
-                return ActionResult(ok=False, detail=f"未知动作: {request.name}")
+                return ActionResult(ok=False, detail=f"Unknown action: {request.name}")
         except (AssertionError, TimeoutError, ValueError, RuntimeError) as exc:
             return ActionResult(ok=False, detail=str(exc))
 
@@ -86,7 +86,7 @@ class Agent:
         for step in flow:
             # step 形如 {"navigate": {"url": "https://..."}} 或 {"click": {"selector": "#btn"}}
             if not isinstance(step, dict) or len(step) != 1:
-                raise ValueError(f"不支持的步骤格式: {step}")
+                raise ValueError(f"Unsupported step format: {step}")
             action_name, params = next(iter(step.items()))
             params = params or {}
 
@@ -97,6 +97,6 @@ class Agent:
             else:
                 report_step.finish("error", result.detail)
                 self.reporter.mark_script_status("error")
-                raise RuntimeError(result.detail or "执行失败")
+                raise RuntimeError(result.detail or "Execution failed")
 
         self.reporter.mark_script_status("done")

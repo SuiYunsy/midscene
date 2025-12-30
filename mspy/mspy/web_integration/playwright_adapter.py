@@ -36,7 +36,7 @@ class PlaywrightInterface:
             from playwright.sync_api import sync_playwright  # type: ignore
         except (ImportError, ModuleNotFoundError) as exc:
             raise ImportError(
-                "需要安装 playwright 才能使用 web-integration：pip install playwright && playwright install"
+                "Playwright is required for web integration. Install via `pip install playwright` and run `playwright install`."
             ) from exc
 
         self._sync_playwright = sync_playwright
@@ -68,42 +68,42 @@ class PlaywrightInterface:
 
     # === 动作实现 ===
     def navigate(self, url: str) -> None:
-        assert self._page, "浏览器尚未初始化"
-        self.logger.info(f"[导航] {url}")
+        assert self._page, "Browser is not initialized"
+        self.logger.info(f"[navigate] {url}")
         self._page.goto(url, wait_until="load", timeout=self.config.timeout)
 
     def click(self, selector: str) -> None:
-        assert self._page, "浏览器尚未初始化"
-        self.logger.info(f"[点击] {selector}")
+        assert self._page, "Browser is not initialized"
+        self.logger.info(f"[click] {selector}")
         self._page.click(selector, timeout=self.config.timeout)
 
     def input(self, selector: str, text: str) -> None:
-        assert self._page, "浏览器尚未初始化"
-        self.logger.info(f"[输入] {selector} <- {text}")
+        assert self._page, "Browser is not initialized"
+        self.logger.info(f"[input] {selector} <- {text}")
         self._page.fill(selector, text, timeout=self.config.timeout)
 
     def expect_text(self, selector: str, contains: str, timeout: int | None = None) -> None:
-        assert self._page, "浏览器尚未初始化"
-        self.logger.info(f"[断言文本] {selector} 包含 {contains}")
+        assert self._page, "Browser is not initialized"
+        self.logger.info(f"[expect text] {selector} contains {contains}")
         self._page.wait_for_selector(selector, timeout=timeout or self.config.timeout, state="visible")
         content = self._page.inner_text(selector, timeout=timeout or self.config.timeout)
         if contains not in content:
-            raise AssertionError(f"元素文本不包含预期内容: {contains}")
+            raise AssertionError(f"Element text does not contain expected content: {contains}")
 
     def evaluate(self, script: str):
-        assert self._page, "浏览器尚未初始化"
-        self.logger.info("[执行脚本]")
+        assert self._page, "Browser is not initialized"
+        self.logger.info("[evaluate script]")
         return self._page.evaluate(script)
 
     def sleep(self, ms: int) -> None:
-        assert self._page, "浏览器尚未初始化"
-        self.logger.info(f"[等待] {ms}ms")
+        assert self._page, "Browser is not initialized"
+        self.logger.info(f"[wait] {ms}ms")
         self._page.wait_for_timeout(ms)
 
     def screenshot(self, title: str | None = None) -> str:
-        assert self._page, "浏览器尚未初始化"
+        assert self._page, "Browser is not initialized"
         path = f".mspy-output/{title or 'screenshot'}.png"
         Path(path).parent.mkdir(parents=True, exist_ok=True)
-        self.logger.info(f"[截图] {path}")
+        self.logger.info(f"[screenshot] {path}")
         self._page.screenshot(path=path, full_page=True)
         return path
