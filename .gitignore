@@ -129,3 +129,5 @@ CLAUDE.md
 tsconfig.build.tsbuildinfo
 .webx
 .mcp.json
+__pycache__/
+*.pyc
