@@ -102,6 +102,21 @@ Read more about [Model Strategy](https://midscenejs.com/model-strategy)
 * API Reference: [https://midscenejs.com/api](https://midscenejs.com/api)
 * GitHub: [https://github.com/web-infra-dev/midscene](https://github.com/web-infra-dev/midscene)
 
+## 🐍 Python Port (mspy)
+
+A new `mspy/` directory provides a Python 3.11 implementation of the core/shared/web-integration logic with Playwright.
+
+1. Copy `.env.example` to `.env` and set `OPENAI_API_KEY`, `OPENAI_BASE_URL`, `MIDSCENE_MODEL`.
+2. Install [uv](https://docs.astral.sh/uv/).
+3. Run the quickstart:
+   ```bash
+   cd mspy
+   uv sync
+   uv run python quickstart.py --url https://example.org --instruction "describe the page"
+   ```
+
+Logs are English while comments stay in Chinese for clarity.
+
 ## 🤝 Community
 
 * [Discord](https://discord.gg/2JyBHxszE4)
