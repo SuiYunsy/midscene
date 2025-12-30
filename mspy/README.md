@@ -170,6 +170,47 @@ result = await service.locate("登录按钮", model_config)
 data = await service.extract("用户信息", model_config)
 ```
 
+## YAML 脚本执行
+
+mspy 支持通过 YAML 脚本来定义自动化任务：
+
+### 示例脚本 (demo.yaml)
+
+```yaml
+web:
+  url: https://www.baidu.com
+
+tasks:
+  - name: 搜索测试
+    flow:
+      - aiTap: 搜索框
+      - aiInput:
+          value: Midscene AI
+      - aiTap: 百度一下
+      - sleep: 2000
+      - aiAssert: 页面显示了搜索结果
+      - aiQuery:
+          name: searchResults
+          value: 搜索结果的前3个标题
+```
+
+### 运行脚本
+
+```bash
+# 使用 CLI 运行
+uv run python -m mspy.cli run demo.yaml
+
+# 或在代码中执行
+from mspy import parse_yaml_script, ScriptPlayer
+
+with open("demo.yaml") as f:
+    script = parse_yaml_script(f.read())
+
+player = ScriptPlayer(script, setup_agent_fn)
+await player.run()
+print(player.result)  # 获取结果
+```
+
 ## 支持的模型
 
 mspy 支持任何 OpenAI 兼容的 API，包括：
@@ -188,6 +229,7 @@ mspy 支持任何 OpenAI 兼容的 API，包括：
 ```
 mspy/
 ├── __init__.py          # 主入口
+├── cli.py               # 命令行工具
 ├── pyproject.toml       # 项目配置
 ├── .env.example         # 环境变量示例
 ├── quick_start.py       # 快速体验脚本
@@ -202,6 +244,7 @@ mspy/
 │   ├── common.py        # 通用功能
 │   ├── service/         # AI 服务
 │   ├── agent/           # Agent 实现
+│   ├── yaml/            # YAML 脚本解析
 │   └── ai_model/        # AI 模型调用
 │       └── prompt/      # 提示词模板
 └── web/                 # Web 集成

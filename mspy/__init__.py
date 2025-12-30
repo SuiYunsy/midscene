@@ -18,6 +18,10 @@ from mspy.core import (
     Service,
     call_ai,
 )
+from mspy.core.yaml import (
+    parse_yaml_script,
+    ScriptPlayer,
+)
 from mspy.web import (
     PlaywrightPage,
     PlaywrightAgent,
@@ -41,6 +45,9 @@ __all__ = [
     "AgentOpt",
     "Service",
     "call_ai",
+    # yaml
+    "parse_yaml_script",
+    "ScriptPlayer",
     # web
     "PlaywrightPage",
     "PlaywrightAgent",
