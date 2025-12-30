@@ -8,10 +8,14 @@ from mspy.core.ai_model.service_caller.caller import (
     call_ai,
     call_ai_with_string_response,
     call_ai_with_object_response,
+    build_vision_message,
+    extract_json_from_response,
 )
 
 __all__ = [
     "call_ai",
     "call_ai_with_string_response",
     "call_ai_with_object_response",
+    "build_vision_message",
+    "extract_json_from_response",
 ]

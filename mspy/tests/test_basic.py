@@ -162,6 +162,88 @@ class TestCLIModule(unittest.TestCase):
         self.assertIsNotNone(create_files_config)
 
 
+class TestPromptModule(unittest.TestCase):
+    """测试Prompt模块"""
+    
+    def test_prompt_imports(self):
+        """测试提示词导入"""
+        from mspy.core.ai_model.prompt import (
+            system_prompt_to_locate_element,
+            find_element_prompt,
+            system_prompt_to_extract,
+            extract_data_query_prompt,
+            element_describer_instruction,
+            assert_schema,
+        )
+        
+        self.assertIsNotNone(system_prompt_to_locate_element)
+        self.assertIsNotNone(find_element_prompt)
+        self.assertIsNotNone(system_prompt_to_extract)
+    
+    def test_locate_prompt_generation(self):
+        """测试定位提示词生成"""
+        from mspy.core.ai_model.prompt import (
+            system_prompt_to_locate_element,
+            find_element_prompt,
+        )
+        
+        prompt = system_prompt_to_locate_element()
+        self.assertIn('Role', prompt)
+        self.assertIn('Objective', prompt)
+        self.assertIn('bbox', prompt)
+        
+        find_prompt = find_element_prompt('login button')
+        self.assertIn('Find:', find_prompt)
+        self.assertIn('login button', find_prompt)
+    
+    def test_extract_prompt_generation(self):
+        """测试提取提示词生成"""
+        from mspy.core.ai_model.prompt import (
+            system_prompt_to_extract,
+            extract_data_query_prompt,
+        )
+        
+        prompt = system_prompt_to_extract()
+        self.assertIn('DATA_DEMAND', prompt)
+        self.assertIn('thought', prompt)
+        
+        query_prompt = extract_data_query_prompt(
+            'Page size: 1280x720',
+            {'name': 'user name', 'age': 'user age'}
+        )
+        self.assertIn('PageDescription', query_prompt)
+        self.assertIn('DATA_DEMAND', query_prompt)
+
+
+class TestEnvLoaderModule(unittest.TestCase):
+    """测试环境变量加载模块"""
+    
+    def test_env_loader_imports(self):
+        """测试环境变量加载器导入"""
+        from mspy.shared import (
+            load_dotenv,
+            get_env,
+            require_env,
+            is_debug_mode,
+            is_cache_enabled,
+        )
+        
+        self.assertIsNotNone(load_dotenv)
+        self.assertIsNotNone(get_env)
+        self.assertIsNotNone(require_env)
+    
+    def test_get_env(self):
+        """测试获取环境变量"""
+        import os
+        from mspy.shared import get_env
+        
+        os.environ['TEST_VAR'] = 'test_value'
+        self.assertEqual(get_env('TEST_VAR'), 'test_value')
+        self.assertIsNone(get_env('NONEXISTENT_VAR'))
+        self.assertEqual(get_env('NONEXISTENT_VAR', 'default'), 'default')
+        del os.environ['TEST_VAR']
+
+
 if __name__ == '__main__':
     print("=== mspy 单元测试 ===\n")
     unittest.main(verbosity=2)

@@ -141,26 +141,81 @@ class Service:
         
         start_time = time.time()
         
-        # 调用AI模型进行定位
-        # 注意: 完整的AI调用需要配置MIDSCENE_MODEL_API_KEY和MIDSCENE_MODEL_NAME环境变量
-        # 当前实现返回空结果，实际使用时需要配置AI模型
         elements = []
         rect = None
         raw_response = "{}"
         usage = None
+        error_msg = None
         
-        if self._ai_vendor_fn:
-            # 如果提供了自定义AI调用函数，使用它进行定位
-            try:
-                from mspy.core.ai_model.types import AIActionType
-                result = await self._ai_vendor_fn(
-                    [{"role": "user", "content": f"请在页面上定位以下元素: {query_prompt}"}],
+        try:
+            # 调用AI模型进行定位
+            from mspy.core.ai_model.service_caller import (
+                call_ai_with_object_response,
+                build_vision_message,
+            )
+            from mspy.core.ai_model.prompt import (
+                system_prompt_to_locate_element,
+                find_element_prompt,
+            )
+            from mspy.core.ai_model.types import AIActionType
+            
+            if model_config and model_config.openai_api_key:
+                # 构建消息
+                system_prompt = system_prompt_to_locate_element(model_config.vl_mode)
+                user_prompt = find_element_prompt(query_prompt)
+                
+                messages = build_vision_message(
+                    system_prompt,
+                    user_prompt,
+                    context.screenshot_base64
+                )
+                
+                # 调用AI
+                result = await call_ai_with_object_response(
+                    messages,
                     AIActionType.LOCATE_ELEMENT,
                     model_config,
+                    {"type": "json_object"}
                 )
-                raw_response = str(result)
-            except Exception as e:
-                debug(f"AI定位失败: {e}")
+                
+                raw_response = result.get('raw_response', '{}')
+                usage = result.get('usage')
+                content = result.get('content', {})
+                
+                # 解析定位结果
+                bbox = content.get('bbox', [])
+                errors = content.get('errors', [])
+                
+                if bbox and len(bbox) == 4:
+                    # 计算矩形和中心点
+                    xmin, ymin, xmax, ymax = bbox
+                    rect = Rect(
+                        left=xmin,
+                        top=ymin,
+                        width=xmax - xmin,
+                        height=ymax - ymin
+                    )
+                    center = (
+                        int(xmin + (xmax - xmin) / 2),
+                        int(ymin + (ymax - ymin) / 2)
+                    )
+                    
+                    element = LocateResultElement(
+                        description=query_prompt,
+                        center=center,
+                        rect=rect
+                    )
+                    elements.append(element)
+                
+                if errors:
+                    error_msg = '; '.join(errors)
+            else:
+                debug("未配置AI模型API密钥，无法进行定位")
+                error_msg = "MIDSCENE_MODEL_API_KEY not configured"
+                
+        except Exception as e:
+            debug(f"AI定位失败: {e}")
+            error_msg = str(e)
         
         time_cost = int((time.time() - start_time) * 1000)
         
@@ -178,6 +233,7 @@ class Service:
             matched_rect=rect,
             task_info=task_info,
             deep_think=deep_think,
+            error=error_msg,
         )
         
         if len(elements) > 1:
@@ -227,17 +283,70 @@ class Service:
         context = await self._get_context()
         start_time = time.time()
         
-        # TODO: 实际调用AI模型进行数据提取
-        # 这里先返回模拟结果
         data = {}
         thought = None
         usage = None
+        raw_response = "{}"
+        error_msg = None
+        
+        try:
+            from mspy.core.ai_model.service_caller import (
+                call_ai_with_object_response,
+                build_vision_message,
+            )
+            from mspy.core.ai_model.prompt import (
+                system_prompt_to_extract,
+                extract_data_query_prompt,
+            )
+            from mspy.core.ai_model.types import AIActionType
+            
+            if model_config and model_config.openai_api_key:
+                # 构建页面描述
+                if not page_description:
+                    page_description = f"Page size: {context.size.width}x{context.size.height}"
+                
+                # 构建消息
+                system_prompt = system_prompt_to_extract()
+                user_prompt = extract_data_query_prompt(page_description, data_demand)
+                
+                messages = build_vision_message(
+                    system_prompt,
+                    user_prompt,
+                    context.screenshot_base64
+                )
+                
+                # 调用AI
+                result = await call_ai_with_object_response(
+                    messages,
+                    AIActionType.EXTRACT_DATA,
+                    model_config,
+                    {"type": "json_object"}
+                )
+                
+                raw_response = result.get('raw_response', '{}')
+                usage = result.get('usage')
+                content = result.get('content', {})
+                
+                data = content.get('data', {})
+                thought = content.get('thought')
+                errors = content.get('errors', [])
+                
+                if errors:
+                    error_msg = '; '.join(errors)
+            else:
+                debug("未配置AI模型API密钥，无法进行数据提取")
+                error_msg = "MIDSCENE_MODEL_API_KEY not configured"
+                
+        except Exception as e:
+            debug(f"AI数据提取失败: {e}")
+            error_msg = str(e)
         
         time_cost = int((time.time() - start_time) * 1000)
         
         task_info = ServiceTaskInfo(
             duration_ms=time_cost,
-            raw_response="{}",
+            raw_response=raw_response,
+            usage=usage,
         )
         
         dump = create_service_dump(
@@ -246,6 +355,7 @@ class Service:
             matched_element=[],
             data=data,
             task_info=task_info,
+            error=error_msg,
         )
         
         return ServiceExtractResult(
@@ -254,6 +364,71 @@ class Service:
             usage=usage,
             dump=dump,
         )
+    
+    async def do_assert(
+        self,
+        assertion: str,
+        model_config: Optional[IModelConfig] = None,
+    ) -> Dict[str, Any]:
+        """执行断言
+        
+        使用AI模型验证页面是否满足断言条件
+        
+        Args:
+            assertion: 断言描述
+            model_config: 模型配置
+            
+        Returns:
+            断言结果 {passed: bool, thought: str}
+        """
+        assert_condition(assertion, "assertion is required")
+        
+        context = await self._get_context()
+        start_time = time.time()
+        
+        passed = False
+        thought = None
+        
+        try:
+            from mspy.core.ai_model.service_caller import (
+                call_ai_with_object_response,
+                build_vision_message,
+            )
+            from mspy.core.ai_model.prompt.assertion import system_prompt_to_assert
+            from mspy.core.ai_model.types import AIActionType
+            
+            if model_config and model_config.openai_api_key:
+                system_prompt = system_prompt_to_assert()
+                user_prompt = f"Assertion to verify: {assertion}"
+                
+                messages = build_vision_message(
+                    system_prompt,
+                    user_prompt,
+                    context.screenshot_base64
+                )
+                
+                result = await call_ai_with_object_response(
+                    messages,
+                    AIActionType.ASSERT,
+                    model_config,
+                    {"type": "json_object"}
+                )
+                
+                content = result.get('content', {})
+                passed = content.get('pass', False)
+                thought = content.get('thought', '')
+            else:
+                debug("未配置AI模型API密钥，无法进行断言")
+                thought = "MIDSCENE_MODEL_API_KEY not configured"
+                
+        except Exception as e:
+            debug(f"AI断言失败: {e}")
+            thought = str(e)
+        
+        return {
+            'passed': passed,
+            'thought': thought,
+        }
     
     async def describe(
         self,
@@ -280,6 +455,44 @@ class Service:
         
         assert_condition(screenshot_base64, "screenshot is required for service.describe")
         
-        # TODO: 实际调用AI模型进行描述
-        # 这里先返回模拟结果
-        return {"description": "元素描述"}
+        try:
+            from mspy.core.ai_model.service_caller import (
+                call_ai_with_object_response,
+                build_vision_message,
+            )
+            from mspy.core.ai_model.prompt import element_describer_instruction
+            from mspy.core.ai_model.types import AIActionType
+            
+            if model_config and model_config.openai_api_key:
+                system_prompt = element_describer_instruction()
+                
+                # 格式化目标位置
+                if isinstance(target, tuple):
+                    user_prompt = f"Describe the element at position ({target[0]}, {target[1]})"
+                else:
+                    user_prompt = f"Describe the element in the rectangle: left={target.left}, top={target.top}, width={target.width}, height={target.height}"
+                
+                messages = build_vision_message(
+                    system_prompt,
+                    user_prompt,
+                    screenshot_base64
+                )
+                
+                result = await call_ai_with_object_response(
+                    messages,
+                    AIActionType.DESCRIBE_ELEMENT,
+                    model_config,
+                    {"type": "json_object"}
+                )
+                
+                content = result.get('content', {})
+                return {
+                    "description": content.get('description', ''),
+                    "error": content.get('error')
+                }
+            else:
+                return {"description": "", "error": "MIDSCENE_MODEL_API_KEY not configured"}
+                
+        except Exception as e:
+            debug(f"AI描述失败: {e}")
+            return {"description": "", "error": str(e)}

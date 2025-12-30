@@ -13,6 +13,13 @@ from mspy.shared.types import (
 from mspy.shared.logger import get_debug, get_logger
 from mspy.shared.utils import assert_condition, sleep_ms
 from mspy.shared.common import get_midscene_run_sub_dir
+from mspy.shared.env_loader import (
+    load_dotenv,
+    get_env,
+    require_env,
+    is_debug_mode,
+    is_cache_enabled,
+)
 
 __all__ = [
     # 类型
@@ -29,4 +36,10 @@ __all__ = [
     "assert_condition",
     "sleep_ms",
     "get_midscene_run_sub_dir",
+    # 环境变量
+    "load_dotenv",
+    "get_env",
+    "require_env",
+    "is_debug_mode",
+    "is_cache_enabled",
 ]
