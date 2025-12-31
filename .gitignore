@@ -129,3 +129,15 @@ CLAUDE.md
 tsconfig.build.tsbuildinfo
 .webx
 .mcp.json
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Note: env/ and ENV/ directories are NOT excluded (they may contain code)
