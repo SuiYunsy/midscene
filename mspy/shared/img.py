@@ -13,7 +13,7 @@ from .logger import get_logger
 from .utils import bytes_to_data_url
 
 logger = get_logger("img")
-DEFAULT_NORMALIZE_SIZE = 1000  # 模型常用的归一化尺寸
+DEFAULT_NORMALIZE_SIZE = 1000  # common normalization size for VLM inputs
 
 
 @dataclass

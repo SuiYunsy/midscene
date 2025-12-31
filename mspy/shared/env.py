@@ -10,8 +10,8 @@ from dotenv import load_dotenv
 
 from .logger import get_logger
 
-DEFAULT_MODEL_FAMILY = "qwen3-vl"
-DEFAULT_MODEL_NAME = "Local-Qwen3-VL-235B-A22B"
+DEFAULT_MODEL_FAMILY = "qwen3-vl"  # override via .env
+DEFAULT_MODEL_NAME = "Local-Qwen3-VL-235B-A22B"  # placeholder for quick start
 
 
 @dataclass

@@ -14,7 +14,7 @@ from ..shared.logger import get_logger
 from ..shared.utils import bytes_to_data_url
 
 logger = get_logger("playwright-interface")
-DEFAULT_CLICK_TIMEOUT_MS = 5000
+DEFAULT_CLICK_TIMEOUT_MS = 5000  # default click timeout for vision-based tapping
 
 
 def wait_for_network_idle(page: Page, idle_ms: int = 500, timeout_ms: int = 10000):

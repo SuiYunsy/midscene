@@ -51,8 +51,9 @@ def safe_parse_json(input_text: str) -> Any:
         repaired = repair_json(candidate)
         return normalize_json_object(json.loads(repaired))
     except (json.JSONDecodeError, ValueError, TypeError) as error:
+        preview = input_text if len(input_text) < 500 else input_text[:500] + "...(truncated)"
         raise ValueError(
-            f"Failed to parse model response into JSON. Response:\n{input_text}"
+            f"Failed to parse model response into JSON. Response preview:\n{preview}"
         ) from error
 
 
