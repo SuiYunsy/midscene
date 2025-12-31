@@ -157,11 +157,16 @@ def extract_json_from_code_block(response: str) -> str:
     """
     从代码块中提取JSON
     
+    支持以下提取模式（按优先级顺序）：
+    1. 直接匹配：如果响应本身就是一个JSON对象（可能有首尾空白）
+    2. 代码块提取：从 ```json {...} ``` 或 ``` {...} ``` 格式中提取
+    3. 模糊匹配：在响应文本中查找类似JSON的结构（{...}）
+    
     Args:
         response: AI响应文本
         
     Returns:
-        提取出的JSON字符串
+        提取出的JSON字符串，如果没有找到则返回原始响应
     """
     # 尝试直接匹配JSON对象
     json_match = re.match(r'^\s*(\{[\s\S]*\})\s*$', response)

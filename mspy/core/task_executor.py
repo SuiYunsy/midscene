@@ -142,8 +142,12 @@ class TaskExecutor:
                     # 更新param中的locate为解析后的元素
                     param["locate"] = element
             
-            # 调用动作
-            result = await action_def.call(param, {"element": element, "uiContext": context})
+            # 调用动作 - 大多数动作只需要param参数
+            import inspect
+            if inspect.iscoroutinefunction(action_def.call):
+                result = await action_def.call(param)
+            else:
+                result = action_def.call(param)
             
             # 执行延迟
             if action_def.delay_after_runner > 0:

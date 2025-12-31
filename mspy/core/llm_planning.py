@@ -28,32 +28,24 @@ class AIActionType:
     DESCRIBE_ELEMENT = "describe_element"
 
 
-def fill_bbox_param(
-    locate_result: Dict[str, Any],
-    image_width: int,
-    image_height: int,
-    right_limit: int,
-    bottom_limit: int,
-    vl_mode: str,
-) -> Dict[str, Any]:
+def fill_bbox_param(locate_result: Dict[str, Any]) -> Dict[str, Any]:
     """
     填充bbox参数
     
+    对于qwen3-vl模型，AI响应中已经包含了正确格式的bbox，
+    所以这里只需要验证并直接返回结果。
+    
     Args:
-        locate_result: 定位结果
-        image_width: 图像宽度
-        image_height: 图像高度
-        right_limit: 右边界限制
-        bottom_limit: 下边界限制
-        vl_mode: VL模式
+        locate_result: 定位结果，包含prompt和可选的bbox字段
         
     Returns:
-        处理后的定位结果
+        处理后的定位结果（目前直接返回原始结果）
     """
     if not locate_result:
         return locate_result
     
-    # 直接返回原始结果，bbox已经在AI响应中
+    # 对于qwen3-vl模型，bbox已经在AI响应中以正确格式返回
+    # 无需进行坐标转换，直接返回原始结果
     return locate_result
 
 
@@ -215,14 +207,7 @@ async def plan(
                 if field_name == "locate" and action.param.get(field_name):
                     locate_result = action.param[field_name]
                     if vl_mode:
-                        action.param[field_name] = fill_bbox_param(
-                            locate_result,
-                            image_width,
-                            image_height,
-                            right_limit,
-                            bottom_limit,
-                            vl_mode,
-                        )
+                        action.param[field_name] = fill_bbox_param(locate_result)
     
     # 检查是否没有动作但需要更多动作
     if not actions and result.more_actions_needed_by_instruction and not result.sleep:

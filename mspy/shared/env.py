@@ -258,10 +258,11 @@ class ModelConfigManager:
         """如果不是VL模型则抛出错误"""
         config = self.get_model_config("default")
         if not config.vl_mode:
+            supported_modes = ", ".join(f"'{m}'" for m in VL_MODE_VALID_VALUES)
             raise ValueError(
                 "MIDSCENE_MODEL_FAMILY is not set to a visual language model (VL model). "
                 "The element localization cannot be achieved. "
-                "Please set MIDSCENE_MODEL_FAMILY to 'qwen3-vl'."
+                f"Please set MIDSCENE_MODEL_FAMILY to one of: {supported_modes}."
             )
 
 
