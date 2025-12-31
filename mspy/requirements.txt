@@ -7,8 +7,8 @@ httpx>=0.24.0
 python-dotenv>=1.0.0
 aiofiles>=23.0.0
 
-# Web集成 (可选)
-# playwright>=1.40.0
+# Web集成 (需要安装playwright)
+playwright>=1.40.0
 
 # 开发依赖
 # pytest>=7.0.0
