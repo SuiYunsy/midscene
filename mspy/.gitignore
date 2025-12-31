@@ -1,0 +1,38 @@
+# Midscene Python .gitignore
+
+# Python 缓存
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# 虚拟环境
+.venv/
+venv/
+
+# 分发/构建
+dist/
+build/
+*.egg-info/
+*.egg
+
+# 本地环境配置
+.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 测试
+.pytest_cache/
+.coverage
+htmlcov/
+
+# 日志
+*.log
+
+# 临时文件
+.temp/
+.tmp/
