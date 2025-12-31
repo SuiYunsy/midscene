@@ -46,12 +46,12 @@ def safe_parse_json(input_text: str) -> Any:
     candidate = extract_json_from_code_block(input_text)
     try:
         return normalize_json_object(json.loads(candidate))
-    except Exception:
+    except (json.JSONDecodeError, TypeError):
         pass
     try:
         repaired = repair_json(candidate)
         return normalize_json_object(json.loads(repaired))
-    except Exception as error:  # noqa: BLE001
+    except (json.JSONDecodeError, ValueError, TypeError) as error:
         raise ValueError(
             f"Failed to parse model response into JSON. Response:\n{input_text}"
         ) from error

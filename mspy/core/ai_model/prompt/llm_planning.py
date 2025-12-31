@@ -95,7 +95,6 @@ Return in JSON format:
          // k-v style parameter fields
       }}, 
     }} | null,
-  ,
   "sleep"?: number, // The sleep time after the action, in milliseconds.
 }}
 

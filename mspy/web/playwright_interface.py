@@ -5,7 +5,7 @@ from __future__ import annotations
 import time
 from typing import Any, Dict, List, Optional, Tuple
 
-from playwright.sync_api import Page, sync_playwright
+from playwright.sync_api import Error as PlaywrightError, Page, TimeoutError, sync_playwright
 
 from ..core.device import AbstractInterface
 from ..core.types import ActionSpaceItem, Size, UIContext
@@ -73,7 +73,7 @@ class PlaywrightInterface(AbstractInterface):
                     locator = self.page.get_by_text(str(prompt), exact=False)
                     locator.first.click(timeout=5000)
                     return True
-                except Exception as error:  # noqa: BLE001
+                except (PlaywrightError, TimeoutError) as error:
                     logger.error("Fallback text click failed: %s", error)
             raise ValueError("No bbox or prompt for Tap action")
         if action_type == "Print_Assert_Result":
