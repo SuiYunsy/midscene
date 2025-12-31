@@ -19,6 +19,7 @@ from ..shared import (
     LocateResultElement,
     DetailedLocateParam,
     ServiceError,
+    Rect,
     INTENT_DEFAULT,
     INTENT_PLANNING,
     get_env_int,
@@ -249,7 +250,6 @@ class Agent:
                             (bbox[0] + bbox[2]) // 2,
                             (bbox[1] + bbox[3]) // 2,
                         )
-                        from ..shared import Rect
                         rect = Rect(
                             left=bbox[0],
                             top=bbox[1],

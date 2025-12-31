@@ -3,6 +3,7 @@ Playwright 网页集成模块
 Playwright web page integration module
 """
 import asyncio
+import base64
 import time
 from typing import Any, Dict, List, Optional
 
@@ -79,8 +80,6 @@ class PlaywrightWebPage(AbstractInterface):
             timeout=10000,
         )
         
-        base64_str = buffer.hex()  # 临时，需要正确编码
-        import base64
         base64_str = base64.b64encode(buffer).decode("utf-8")
         
         result = create_img_base64_by_format("jpeg", base64_str)
