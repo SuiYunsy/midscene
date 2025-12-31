@@ -3,7 +3,7 @@ import sys
 
 
 def get_logger(name: str) -> logging.Logger:
-    """创建带控制台输出的日志记录器（英文日志）。"""
+    """创建带控制台输出的日志记录器，统一格式（级别/名称/消息）。"""
     logger = logging.getLogger(name)
     if logger.handlers:
         return logger

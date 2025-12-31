@@ -78,7 +78,9 @@ class Service:
             [system, user], model_config, response_format=response_format
         )
         content: Dict[str, Any] = result["content"]
-        bbox = tuple(content.get("bbox") or [0, 0, 0, 0])  # type: ignore[arg-type]
+        bbox_value = content.get("bbox")
+        assert_true(bbox_value, "Model did not return bbox")
+        bbox = tuple(bbox_value)  # type: ignore[arg-type]
         center = content.get("center")
         if not center and len(bbox) == 4:
             x1, y1, x2, y2 = bbox  # type: ignore[misc]

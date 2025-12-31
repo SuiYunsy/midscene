@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 from .logger import get_logger
 
 DEFAULT_MODEL_FAMILY = "qwen3-vl"
+DEFAULT_MODEL_NAME = "Local-Qwen3-VL-235B-A22B"
 
 
 @dataclass
@@ -50,9 +51,7 @@ class ConfigManager:
     def model_config(self, intent: str = "default") -> ModelConfig:
         """根据意图返回模型配置，planning/insight/default 共用主体配置。"""
         model_name = (
-            self.get("MIDSCENE_MODEL_NAME")
-            or self.get("MODEL_NAME")
-            or "Local-Qwen3-VL-235B-A22B"
+            self.get("MIDSCENE_MODEL_NAME") or self.get("MODEL_NAME") or DEFAULT_MODEL_NAME
         )
         base_url = self.get("MIDSCENE_MODEL_BASE_URL") or self.get("MODEL_BASE_URL")
         api_key = self.get("MIDSCENE_MODEL_API_KEY") or self.get("MODEL_API_KEY")

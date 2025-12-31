@@ -135,7 +135,7 @@ class TaskExecutor:
 
             if plan.error:
                 raise TaskExecutionError(plan.error)
-            if plan.sleep:
+            if plan.sleep and plan.sleep > 0:
                 # 转换毫秒 -> 秒
                 time.sleep(plan.sleep / MS_IN_SECOND)
             if plan.action:

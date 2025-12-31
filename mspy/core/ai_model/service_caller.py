@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from typing import Any, Dict, Iterable, Optional, Tuple
 
 import httpx
@@ -19,8 +20,6 @@ def extract_json_from_code_block(response: str) -> str:
     response = response.strip()
     if response.startswith("{") and response.endswith("}"):
         return response
-    import re
-
     block = re.search(r"```(?:json)?\s*(\{[\s\S]*?\})\s*```", response)
     if block:
         return block.group(1)
