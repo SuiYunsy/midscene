@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import time
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 from playwright.sync_api import Error as PlaywrightError, Page, TimeoutError, sync_playwright
 
@@ -81,7 +81,9 @@ class PlaywrightInterface(AbstractInterface):
             return True
         raise ValueError(f"Unsupported action: {action_type}")
 
-    def _click_bbox(self, bbox: List[float] | Tuple[float, float, float, float]) -> bool:
+    def _click_bbox(
+        self, bbox: Union[List[float], Tuple[float, float, float, float]]
+    ) -> bool:
         x1, y1, x2, y2 = bbox
         x = (float(x1) + float(x2)) / 2
         y = (float(y1) + float(y2)) / 2

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import base64
 import json
-from typing import Any, Dict, Iterable
+from typing import Any, Dict, Iterable, List
 
 
 def assert_true(condition: bool, message: str) -> None:
@@ -40,8 +40,8 @@ def json_dumps_clean(data: Any) -> str:
     return json.dumps(data, ensure_ascii=False, separators=(",", ":"))
 
 
-def chunk(iterable: Iterable[Any], size: int) -> Iterable[list[Any]]:
-    buf: list[Any] = []
+def chunk(iterable: Iterable[Any], size: int) -> Iterable[List[Any]]:
+    buf: List[Any] = []
     for item in iterable:
         buf.append(item)
         if len(buf) >= size:
