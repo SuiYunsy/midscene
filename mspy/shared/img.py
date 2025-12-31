@@ -5,7 +5,7 @@
 import base64
 import io
 from typing import Optional, Tuple
-from PIL import Image
+from PIL import Image, ImageDraw
 
 from .logger import get_debug
 
@@ -278,8 +278,6 @@ def composite_element_info_img(
     Returns:
         处理后的base64图像
     """
-    from PIL import ImageDraw
-    
     image = base64_to_pil_image(input_img_base64)
     draw = ImageDraw.Draw(image)
     

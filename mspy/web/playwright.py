@@ -3,6 +3,7 @@ Playwright Web页面集成模块
 """
 
 import asyncio
+import base64
 import json
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
@@ -56,7 +57,6 @@ class PlaywrightPage(AbstractInterface):
         """获取屏幕截图的base64编码"""
         debug("Taking screenshot")
         screenshot_bytes = await self._page.screenshot(type='jpeg', quality=90)
-        import base64
         base64_str = base64.b64encode(screenshot_bytes).decode('utf-8')
         return f"data:image/jpeg;base64,{base64_str}"
     

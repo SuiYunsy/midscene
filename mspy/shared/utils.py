@@ -2,7 +2,11 @@
 通用工具函数
 """
 
+import asyncio
 import hashlib
+import json
+import re
+import time
 import uuid as uuid_lib
 from typing import Any, Optional
 
@@ -23,7 +27,6 @@ def generate_hash_id(rect: Any, content: str = "") -> str:
     Returns:
         哈希ID字符串
     """
-    import json
     combined = json.dumps({
         'content': content,
         'rect': rect,
@@ -68,7 +71,6 @@ def replace_illegal_path_chars(s: str) -> str:
     Returns:
         处理后的字符串
     """
-    import re
     return re.sub(r'[:*?"<>|# ]', '-', s)
 
 
@@ -79,7 +81,6 @@ def sleep(ms: int) -> None:
     Args:
         ms: 毫秒数
     """
-    import time
     time.sleep(ms / 1000)
 
 
@@ -90,5 +91,4 @@ async def async_sleep(ms: int) -> None:
     Args:
         ms: 毫秒数
     """
-    import asyncio
     await asyncio.sleep(ms / 1000)

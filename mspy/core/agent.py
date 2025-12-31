@@ -2,6 +2,7 @@
 Agent模块 - 核心代理类
 """
 
+import asyncio
 import time
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
@@ -244,7 +245,6 @@ class Agent:
             # 处理睡眠
             if plan_result.sleep and plan_result.sleep > 0:
                 debug(f"Sleeping for {plan_result.sleep}ms")
-                import asyncio
                 await asyncio.sleep(plan_result.sleep / 1000)
             
             # 检查是否完成
@@ -322,7 +322,6 @@ class Agent:
             
             # 延迟
             if action_def.delay_after_runner > 0:
-                import asyncio
                 await asyncio.sleep(action_def.delay_after_runner / 1000)
             
             await self.interface.after_invoke_action(action_type, param)

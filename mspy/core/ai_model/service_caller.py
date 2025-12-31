@@ -4,6 +4,7 @@ AI服务调用模块 - 封装OpenAI兼容的API调用
 
 import json
 import re
+import time
 from typing import Any, Dict, List, Optional, TypeVar, Union
 import httpx
 from openai import OpenAI
@@ -146,8 +147,6 @@ async def call_ai(
     Returns:
         {'content': str, 'usage': AIUsageInfo}
     """
-    import time
-    
     # 打印请求日志（掩码base64）
     masked_messages = mask_base64_in_messages([dict(m) for m in messages])
     debug(f"Sending request to {model_config.model_name}")
