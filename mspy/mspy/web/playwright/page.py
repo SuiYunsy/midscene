@@ -120,8 +120,9 @@ class PlaywrightPage(AbstractInterface):
         
         try:
             debug_page(f"Waiting for navigation (timeout: {self.wait_for_navigation_timeout}ms)")
-            await self.underlying_page.wait_for_selector(
-                "html",
+            # 使用wait_for_load_state等待页面加载完成
+            await self.underlying_page.wait_for_load_state(
+                "load",
                 timeout=self.wait_for_navigation_timeout,
             )
         except Exception as e:

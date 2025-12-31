@@ -8,7 +8,7 @@ import asyncio
 import logging
 from typing import Optional, Any, Dict
 
-from playwright.async_api import async_playwright, Browser, Page, BrowserContext
+from playwright.async_api import async_playwright, Browser, Page, BrowserContext, Playwright
 
 from mspy.web.playwright.page import PlaywrightPage
 from mspy.core.agent import Agent, AgentOpt
@@ -31,6 +31,7 @@ class PlaywrightAgent(Agent):
         opts: Optional[AgentOpt] = None,
         browser: Optional[Browser] = None,
         context: Optional[BrowserContext] = None,
+        playwright: Optional[Playwright] = None,
     ):
         """
         初始化Playwright Agent
@@ -40,12 +41,14 @@ class PlaywrightAgent(Agent):
             opts: Agent选项
             browser: Playwright浏览器实例（用于资源管理）
             context: Playwright浏览器上下文（用于资源管理）
+            playwright: Playwright实例（用于资源管理）
         """
         super().__init__(playwright_page, opts)
         
         self._browser = browser
         self._context = context
         self._page = playwright_page.underlying_page
+        self._playwright = playwright
     
     @classmethod
     async def create(
@@ -119,10 +122,8 @@ class PlaywrightAgent(Agent):
             opts=agent_opts,
             browser=browser,
             context=context,
+            playwright=pw,
         )
-        
-        # 保存playwright实例用于清理
-        agent._playwright = pw
         
         return agent
     
@@ -163,7 +164,7 @@ class PlaywrightAgent(Agent):
                 pass
         
         # 关闭Playwright
-        if hasattr(self, "_playwright") and self._playwright:
+        if self._playwright:
             try:
                 await self._playwright.stop()
             except Exception:

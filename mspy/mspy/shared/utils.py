@@ -116,6 +116,8 @@ def replace_illegal_path_chars_and_space(s: str) -> str:
     """
     替换文件名中的非法字符和空格
     
+    替换的字符包括：: * ? " < > | # 空格
+    
     Args:
         s: 原始字符串
         
@@ -123,7 +125,9 @@ def replace_illegal_path_chars_and_space(s: str) -> str:
         替换后的字符串
     """
     import re
-    return re.sub(r'[:*?"<>|# ]', "-", s)
+    # 匹配文件名中的非法字符：冒号、星号、问号、引号、尖括号、竖线、井号、空格
+    illegal_chars_pattern = r'[:*?"<>|# ]'
+    return re.sub(illegal_chars_pattern, "-", s)
 
 
 async def repeat(times: int, fn: Any) -> None:

@@ -44,25 +44,26 @@ async def create_chat_client(
     """
     debug_proxy = get_debug("ai:call:proxy")
     
-    # 处理代理
+    # 处理代理 - 通过httpx配置
     http_proxy = model_config.http_proxy
     socks_proxy = model_config.socks_proxy
     
-    # 注意：Python的openai库使用httpx，代理配置需要通过环境变量或httpx参数
+    # 构建http_client配置
+    http_client = None
     if http_proxy:
         debug_proxy(f"Using HTTP proxy: {http_proxy[:20]}***")
-        import os
-        os.environ["HTTP_PROXY"] = http_proxy
-        os.environ["HTTPS_PROXY"] = http_proxy
+        import httpx
+        http_client = httpx.AsyncClient(proxy=http_proxy)
     elif socks_proxy:
         debug_proxy(f"Using SOCKS proxy: {socks_proxy[:20]}***")
-        # SOCKS代理需要额外的库支持
-        logger.warning("SOCKS proxy support requires additional configuration")
+        # SOCKS代理需要httpx-socks库支持
+        logger.warning("SOCKS proxy support requires httpx-socks package")
     
     client = AsyncOpenAI(
         base_url=model_config.openai_base_url,
         api_key=model_config.openai_api_key,
         timeout=model_config.timeout / 1000 if model_config.timeout else None,
+        http_client=http_client,
     )
     
     # 如果有自定义客户端创建函数，调用它
