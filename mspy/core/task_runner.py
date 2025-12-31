@@ -251,9 +251,14 @@ class TaskRunner:
                     except Exception as e:
                         print(f"error in on_task_start: {e}")
                 
-                # TODO: 执行任务逻辑（需要executor）
-                # 这里暂时只是模拟
+                # 注意：任务执行逻辑需要在具体的TaskExecutor中实现
+                # 当前TaskRunner主要负责任务状态管理和回调
+                # 完整的任务执行需要集成到Agent中
                 _debug(f"executing task: {task.type}")
+                
+                # 调用任务执行器（如果配置了）
+                if hasattr(task, 'executor') and task.executor:
+                    await task.executor()
                 
                 # 最后一个任务，捕获截图
                 is_last_task = task_index == len(self.tasks) - 1

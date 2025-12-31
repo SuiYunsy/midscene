@@ -24,8 +24,12 @@ GROUPED_ACTION_DUMP_FILE_EXT = ".json"
 
 def get_version() -> str:
     """获取SDK版本"""
-    from mspy import __version__
-    return __version__
+    # 使用直接导入避免循环引用
+    try:
+        import importlib.metadata
+        return importlib.metadata.version("mspy")
+    except Exception:
+        return "0.1.0"  # 默认版本
 
 
 def get_report_file_name(base_name: str) -> str:

@@ -131,6 +131,10 @@ async def call_ai(
             f"cost-ms, {time_cost}"
         )
         
+        # 检查响应是否有效
+        if not response.choices or len(response.choices) == 0:
+            raise ValueError(f"empty choices in AI response from {model_name}")
+        
         content = response.choices[0].message.content or ""
         
         if not content:

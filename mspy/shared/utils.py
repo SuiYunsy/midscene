@@ -53,7 +53,7 @@ def generate_hash_id(rect: Any, content: str = "") -> str:
     slice_length = 5
     sliced_hash = ""
     
-    while slice_length < len(hash_letters) - 1:
+    while slice_length <= len(hash_letters):
         sliced_hash = hash_letters[:slice_length]
         if sliced_hash in _hash_map and _hash_map[sliced_hash] != combined:
             slice_length += 1

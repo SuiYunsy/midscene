@@ -153,13 +153,13 @@ class ScriptPlayer:
         # AI Tap
         if item.ai_tap:
             _debug(f"AI Tap: {item.ai_tap}")
-            # TODO: 实现ai_tap
+            print(f"Warning: ai_tap action not yet fully implemented: {item.ai_tap}")
             return
         
         # AI Hover
         if item.ai_hover:
             _debug(f"AI Hover: {item.ai_hover}")
-            # TODO: 实现ai_hover
+            print(f"Warning: ai_hover action not yet fully implemented: {item.ai_hover}")
             return
         
         # AI Input
@@ -168,7 +168,7 @@ class ScriptPlayer:
             locate = input_config.get("locate") or input_config.get("prompt")
             value = input_config.get("value", "")
             _debug(f"AI Input: {locate} = {value}")
-            # TODO: 实现ai_input
+            print(f"Warning: ai_input action not yet fully implemented: {locate} = {value}")
             return
         
         # AI Keyboard Press
@@ -176,12 +176,12 @@ class ScriptPlayer:
             press_config = item.ai_keyboard_press
             key = press_config.get("key") or press_config.get("keyName")
             _debug(f"AI Keyboard Press: {key}")
-            # TODO: 实现ai_keyboard_press
+            print(f"Warning: ai_keyboard_press action not yet fully implemented: {key}")
             return
         
         # AI Scroll
         if item.ai_scroll:
             scroll_config = item.ai_scroll
             _debug(f"AI Scroll: {scroll_config}")
-            # TODO: 实现ai_scroll
+            print(f"Warning: ai_scroll action not yet fully implemented: {scroll_config}")
             return

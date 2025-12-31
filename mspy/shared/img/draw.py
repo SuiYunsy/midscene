@@ -67,10 +67,20 @@ def draw_box_on_image(
         # 绘制标签（如果提供）
         if labels and i < len(labels):
             label = labels[i]
-            # 尝试使用默认字体
-            try:
-                font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 12)
-            except Exception:
+            # 尝试使用跨平台字体
+            font = None
+            font_paths = [
+                "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",  # Linux
+                "/System/Library/Fonts/Helvetica.ttc",  # macOS
+                "C:\\Windows\\Fonts\\arial.ttf",  # Windows
+            ]
+            for font_path in font_paths:
+                try:
+                    font = ImageFont.truetype(font_path, 12)
+                    break
+                except Exception:
+                    continue
+            if font is None:
                 font = ImageFont.load_default()
             
             # 绘制标签背景

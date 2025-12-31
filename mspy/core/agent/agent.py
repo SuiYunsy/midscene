@@ -296,6 +296,9 @@ class Agent:
         """
         执行AI驱动的动作
         
+        注意：此方法目前是基础实现，完整的规划和执行逻辑
+        需要集成 TaskExecutor 和 Service 模块。
+        
         Args:
             task_prompt: 任务描述
             cacheable: 是否可缓存
@@ -307,10 +310,10 @@ class Agent:
         
         model_config = self.model_config_manager.get_model_config("planning")
         
-        # TODO: 实现完整的规划和执行逻辑
-        # 这里只是基础框架
+        # 基础实现 - 完整实现需要集成 TaskExecutor
+        _debug(f"Using model config: {model_config.model_name}")
         
-        return {"status": "ok", "prompt": task_prompt}
+        return {"status": "pending_implementation", "prompt": task_prompt}
     
     async def ai_query(
         self,
@@ -320,6 +323,9 @@ class Agent:
     ) -> Any:
         """
         查询页面信息
+        
+        注意：此方法目前是基础实现，完整的提取逻辑
+        需要集成 Service.extract 方法。
         
         Args:
             demand: 查询需求描述
@@ -333,9 +339,10 @@ class Agent:
         
         model_config = self.model_config_manager.get_model_config("insight")
         
-        # TODO: 实现完整的提取逻辑
+        # 基础实现 - 完整实现需要集成 Service.extract
+        _debug(f"Using model config: {model_config.model_name}")
         
-        return {"status": "ok", "demand": demand}
+        return {"status": "pending_implementation", "demand": demand}
     
     async def ai_locate(
         self,
@@ -344,6 +351,9 @@ class Agent:
     ) -> dict[str, Any]:
         """
         定位元素
+        
+        注意：此方法目前是基础实现，完整的定位逻辑
+        需要集成 Service.locate 方法。
         
         Args:
             prompt: 元素描述
@@ -356,9 +366,10 @@ class Agent:
         
         model_config = self.model_config_manager.get_model_config("insight")
         
-        # TODO: 实现完整的定位逻辑
+        # 基础实现 - 完整实现需要集成 Service.locate
+        _debug(f"Using model config: {model_config.model_name}")
         
-        return {"rect": None, "center": None}
+        return {"rect": None, "center": None, "status": "pending_implementation"}
     
     async def ai_assert(
         self,
@@ -368,6 +379,9 @@ class Agent:
     ) -> Optional[dict[str, Any]]:
         """
         断言验证
+        
+        注意：此方法目前是基础实现，完整的断言逻辑
+        需要集成 Service.extract 方法进行布尔查询。
         
         Args:
             assertion: 断言描述
@@ -384,10 +398,11 @@ class Agent:
         
         model_config = self.model_config_manager.get_model_config("insight")
         
-        # TODO: 实现完整的断言逻辑
+        # 基础实现 - 完整实现需要集成 Service.extract
+        _debug(f"Using model config: {model_config.model_name}")
         
         if keep_raw_response:
-            return {"pass": True, "thought": ""}
+            return {"pass": True, "thought": "", "status": "pending_implementation"}
         
         return None
     
@@ -400,6 +415,9 @@ class Agent:
         """
         等待条件满足
         
+        注意：此方法目前是基础实现，完整的等待逻辑
+        需要循环调用 ai_assert 直到条件满足或超时。
+        
         Args:
             assertion: 条件描述
             timeout_ms: 超时时间（毫秒）
@@ -410,7 +428,8 @@ class Agent:
         """
         _debug(f"ai_wait_for: {assertion}, timeout={timeout_ms}ms")
         
-        # TODO: 实现完整的等待逻辑
+        # 基础实现 - 完整实现需要循环检查
+        _debug("Warning: ai_wait_for is a basic implementation")
         pass
     
     async def record_to_report(
