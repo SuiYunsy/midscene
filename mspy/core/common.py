@@ -297,7 +297,9 @@ def build_yaml_flow_from_plans(
             continue
         
         flow_key = action.get("interface_alias") or verb
-        flow_item = {flow_key: "", **(plan.param or {})}
+        # 先复制参数，然后设置flow_key以避免被覆盖
+        flow_item = dict(plan.param) if plan.param else {}
+        flow_item[flow_key] = flow_item.get(flow_key, "")
         flow.append(flow_item)
     
     if sleep:

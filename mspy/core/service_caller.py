@@ -180,14 +180,15 @@ async def call_ai(
     max_tokens = model_config.max_tokens
     skip_cert = model_config.skip_cert_verification
     
-    # 确保base_url以正确的路径结尾
+    # 使用urllib.parse构建URL
+    from urllib.parse import urljoin
+    
+    # 确保base_url以斜杠结尾以便urljoin正确工作
     if not base_url.endswith("/"):
         base_url += "/"
-    if not base_url.endswith("v1/"):
-        if "v1" not in base_url:
-            base_url += "v1/"
     
-    url = f"{base_url}chat/completions"
+    # 构建chat/completions端点URL
+    url = urljoin(base_url, "chat/completions")
     
     headers = {
         "Content-Type": "application/json",

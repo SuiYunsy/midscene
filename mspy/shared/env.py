@@ -45,8 +45,11 @@ MIDSCENE_PLANNING_MODEL_TEMPERATURE = "MIDSCENE_PLANNING_MODEL_TEMPERATURE"
 
 # ==================== VL Mode Types ====================
 
-# 支持的VL模式类型 - 目前只支持qwen3-vl
+# 支持的VL模式类型
+# 注意: 目前Python SDK仅支持 qwen3-vl 模型家族
+# 如需支持其他模型（如qwen2.5-vl, doubao-vision等），需要扩展此类型定义
 VLModeType = Literal["qwen3-vl"]
+"""VL模式类型，目前仅支持 qwen3-vl。"""
 
 
 # ==================== Model Intent ====================

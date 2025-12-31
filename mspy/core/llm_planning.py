@@ -83,8 +83,9 @@ def _description_for_action(action: Dict[str, Any]) -> str:
             for line in param_lines:
                 fields.append(f"  - {line}")
     
+    fields_str = "\n".join([tab + f for f in fields])
     return f"""- {name}, {description}
-{tab}{chr(10).join([tab + f for f in fields])}""".strip()
+{tab}{fields_str}""".strip()
 
 
 def _build_system_prompt(action_space: List[Dict[str, Any]]) -> str:

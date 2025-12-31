@@ -5,6 +5,7 @@ Midscene Task Executor Module
 """
 
 import time
+from functools import partial
 from typing import Dict, Any, List, Optional, Callable
 
 from ..shared import (
@@ -352,8 +353,11 @@ class TaskExecutor:
                 # 睡眠动作
                 time_ms = plan_action.param.get("timeMs", 3000) if plan_action.param else 3000
                 
-                async def sleep_executor(param, context, ms=time_ms):
-                    await sleep_ms(ms)
+                # 使用工厂函数来捕获time_ms值
+                def make_sleep_executor(sleep_time: int):
+                    async def sleep_executor(param, context):
+                        await sleep_ms(sleep_time)
+                    return sleep_executor
                 
                 task = ExecutionTask(
                     type="Action Space",
@@ -362,7 +366,7 @@ class TaskExecutor:
                     thought=plan_action.thought,
                     sub_task=sub_task,
                 )
-                task.executor = sleep_executor
+                task.executor = make_sleep_executor(time_ms)
                 tasks.append(task)
                 
             elif plan_type == "Locate":

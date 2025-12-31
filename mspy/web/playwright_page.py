@@ -6,6 +6,7 @@ Playwright页面模块，实现AbstractInterface接口
 
 import asyncio
 import base64
+import platform
 from typing import Dict, Any, List, Optional
 
 from playwright.async_api import Page as PlaywrightPageType
@@ -302,7 +303,6 @@ class PlaywrightPage(AbstractInterface):
         await self._mouse_click(element.center[0], element.center[1])
         
         # 全选并删除
-        import platform
         if platform.system() == "Darwin":
             await self._page.keyboard.down("Meta")
             await self._page.keyboard.press("a")
