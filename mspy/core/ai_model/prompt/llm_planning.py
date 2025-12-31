@@ -1,5 +1,7 @@
 """规划系统提示词，保持原英文文案。"""
 
+# 注：提示词内容保持英文，以与原 TS 行为一致，中文用户指令依旧可透传。
+
 from __future__ import annotations
 
 from typing import Iterable, Optional

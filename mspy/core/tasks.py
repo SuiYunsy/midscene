@@ -16,6 +16,7 @@ from ..shared.logger import get_logger
 from ..shared.utils import assert_true, compact_dict
 
 logger = get_logger("task-executor")
+MS_IN_SECOND = 1000
 
 
 class TaskExecutionError(Exception):
@@ -135,7 +136,8 @@ class TaskExecutor:
             if plan.error:
                 raise TaskExecutionError(plan.error)
             if plan.sleep:
-                time.sleep(plan.sleep / 1000)
+                # 转换毫秒 -> 秒
+                time.sleep(plan.sleep / MS_IN_SECOND)
             if plan.action:
                 exec_result = self._apply_action(plan, context, planning_model)
                 if not exec_result.success:

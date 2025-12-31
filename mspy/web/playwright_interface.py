@@ -14,6 +14,7 @@ from ..shared.logger import get_logger
 from ..shared.utils import bytes_to_data_url
 
 logger = get_logger("playwright-interface")
+DEFAULT_CLICK_TIMEOUT_MS = 5000
 
 
 def wait_for_network_idle(page: Page, idle_ms: int = 500, timeout_ms: int = 10000):
@@ -71,7 +72,7 @@ class PlaywrightInterface(AbstractInterface):
             if prompt:
                 try:
                     locator = self.page.get_by_text(str(prompt), exact=False)
-                    locator.first.click(timeout=5000)
+                    locator.first.click(timeout=DEFAULT_CLICK_TIMEOUT_MS)
                     return True
                 except (PlaywrightError, TimeoutError) as error:
                     logger.error("Fallback text click failed: %s", error)

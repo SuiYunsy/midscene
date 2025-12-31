@@ -76,7 +76,14 @@ def call_ai(
     *,
     response_format: Optional[Dict[str, Any]] = None,
 ) -> Tuple[str, Optional[Dict[str, Any]]]:
-    """调用 openai 兼容接口，返回 content 与 usage。"""
+    """
+    调用 openai 兼容接口，返回文本内容与 usage。
+
+    :param messages: openai 风格的消息数组，包含 system/user/assistant。
+    :param model_config: 模型配置（base_url、api_key、proxy、超时等）。
+    :param response_format: 可选的 JSON Schema，用于强约束返回结构。
+    :returns: (content, usage) 二元组，content 为字符串，usage 为 tokens 统计或 None。
+    """
     payload: Dict[str, Any] = {
         "model": model_config.model_name,
         "messages": list(messages),

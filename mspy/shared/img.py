@@ -13,6 +13,7 @@ from .logger import get_logger
 from .utils import bytes_to_data_url
 
 logger = get_logger("img")
+DEFAULT_NORMALIZE_SIZE = 1000  # 模型常用的归一化尺寸
 
 
 @dataclass
@@ -57,7 +58,7 @@ def crop_by_rect(
     x1, y1, x2, y2 = rect
     cropped = img.crop((x1, y1, x2, y2))
     if normalize_1000:
-        cropped = cropped.resize((1000, 1000))
+        cropped = cropped.resize((DEFAULT_NORMALIZE_SIZE, DEFAULT_NORMALIZE_SIZE))
     logger.info("Cropped image with rect=%s", rect)
     return _image_to_base64(cropped)
 
