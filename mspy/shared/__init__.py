@@ -7,6 +7,7 @@ from .constants import (
     DEFAULT_WAIT_FOR_NETWORK_IDLE_TIMEOUT,
     DEFAULT_REPLANNING_CYCLE_LIMIT,
     DEFAULT_MAX_IMAGES_IN_HISTORY,
+    SCROLL_MAX_DISTANCE,
 )
 __all__ = [
     "Config", "get_config",
@@ -14,4 +15,5 @@ __all__ = [
     "assert_condition", "sleep_ms", "encode_image_base64", "mask_base64_in_text",
     "DEFAULT_WAIT_FOR_NAVIGATION_TIMEOUT", "DEFAULT_WAIT_FOR_NETWORK_IDLE_TIMEOUT",
     "DEFAULT_REPLANNING_CYCLE_LIMIT", "DEFAULT_MAX_IMAGES_IN_HISTORY",
+    "SCROLL_MAX_DISTANCE",
 ]

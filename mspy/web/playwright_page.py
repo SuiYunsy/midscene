@@ -10,6 +10,7 @@ from ..shared.logger import get_logger
 from ..shared.constants import (
     DEFAULT_WAIT_FOR_NAVIGATION_TIMEOUT,
     DEFAULT_WAIT_FOR_NETWORK_IDLE_TIMEOUT,
+    SCROLL_MAX_DISTANCE,
 )
 
 logger = get_logger("playwright")
@@ -150,22 +151,22 @@ class PlaywrightPage(AbstractInterface):
         self, start_x: Optional[int] = None, start_y: Optional[int] = None
     ) -> None:
         """滚动到顶部"""
-        await self.scroll(0, -9999999, start_x, start_y)
+        await self.scroll(0, -SCROLL_MAX_DISTANCE, start_x, start_y)
     async def scroll_to_bottom(
         self, start_x: Optional[int] = None, start_y: Optional[int] = None
     ) -> None:
         """滚动到底部"""
-        await self.scroll(0, 9999999, start_x, start_y)
+        await self.scroll(0, SCROLL_MAX_DISTANCE, start_x, start_y)
     async def scroll_to_left(
         self, start_x: Optional[int] = None, start_y: Optional[int] = None
     ) -> None:
         """滚动到最左"""
-        await self.scroll(-9999999, 0, start_x, start_y)
+        await self.scroll(-SCROLL_MAX_DISTANCE, 0, start_x, start_y)
     async def scroll_to_right(
         self, start_x: Optional[int] = None, start_y: Optional[int] = None
     ) -> None:
         """滚动到最右"""
-        await self.scroll(9999999, 0, start_x, start_y)
+        await self.scroll(SCROLL_MAX_DISTANCE, 0, start_x, start_y)
     # 导航操作
     async def goto(self, url: str) -> None:
         """导航到URL"""

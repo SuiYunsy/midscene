@@ -28,9 +28,9 @@ class AIService:
             logger.info(f"使用SOCKS代理: {self._sanitize_proxy_url(proxy_url)}")
         if proxy_url:
             kwargs["proxy"] = proxy_url
-        # SSL配置
+        # SSL配置 - 禁用证书验证存在安全风险，仅在开发/测试环境使用
         if self.config.skip_cert_verification:
-            logger.warning("已禁用SSL证书验证")
+            logger.warning("⚠️ 安全警告: 已禁用SSL证书验证。这可能导致中间人攻击风险，请仅在开发/测试环境中使用！")
             kwargs["verify"] = False
         return httpx.AsyncClient(**kwargs)
     def _sanitize_proxy_url(self, url: str) -> str:
