@@ -1,0 +1,13 @@
+# mspy 快速体验 YAML 脚本
+# 有头模式，导航到example.com，执行aiAct操作
+
+web:
+  url: https://example.com
+  headless: false
+  viewWidth: 1280
+  viewHeight: 720
+
+tasks:
+  - name: 体验example.com
+    flow:
+      - aiAct: "点击了解更多，然后点击About，断言：出现About us"
