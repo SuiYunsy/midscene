@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments - 注意：不排除 env/ 和 ENV/
+.venv/
+venv/
+.venv*/
+venv*/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Midscene运行目录
+midscene_run/
+
+# 环境变量（保留示例）
+.env
+!.env.example
+
+# 日志
+*.log
+
+# 临时文件
+*.tmp
+*.bak
