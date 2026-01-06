@@ -1,0 +1,11 @@
+# Midscene Python SDK 依赖
+# Midscene Python SDK Requirements
+
+# 核心依赖 / Core Dependencies
+openai>=1.0.0
+httpx>=0.24.0
+Pillow>=9.0.0
+python-dotenv>=1.0.0
+
+# Playwright 依赖 / Playwright Dependencies
+playwright>=1.40.0
