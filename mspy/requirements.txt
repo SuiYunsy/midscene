@@ -1,0 +1,11 @@
+# Midscene Python 依赖
+# Midscene Python dependencies
+
+# 核心依赖 (Core dependencies)
+openai>=1.0.0
+playwright>=1.40.0
+python-dotenv>=1.0.0
+Pillow>=10.0.0
+
+# HTTP 代理支持 (HTTP proxy support)
+httpx>=0.25.0
