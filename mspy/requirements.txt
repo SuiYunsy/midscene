@@ -1,0 +1,14 @@
+# Midscene Python Dependencies
+# Python 3.11+
+
+# OpenAI SDK - LLM 调用
+openai>=1.0.0
+
+# Playwright - 浏览器自动化
+playwright>=1.40.0
+
+# 环境变量支持
+python-dotenv>=1.0.0
+
+# 工具库
+httpx>=0.25.0  # HTTP 客户端（代理支持）
