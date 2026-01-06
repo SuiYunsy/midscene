@@ -1,0 +1,25 @@
+[project]
+name = "mspy"
+version = "0.1.0"
+description = "Python 3.11 port of Midscene core/shared/web modules"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "python-dotenv==1.0.1",
+  "openai==1.58.1",
+  "pyyaml==6.0.2",
+  "playwright==1.49.0",
+]
+
+[project.optional-dependencies]
+dev = ["ruff==0.8.4"]
+
+[tool.uv]
+package = true
+
+[tool.uv.sources]
+mspy = { path = ".", editable = true }
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
