@@ -36,6 +36,12 @@
 > v0.x 文档与代码请查看 [https://v0.midscenejs.com/](https://v0.midscenejs.com/) 以及 `v0` 分支。  
 > v1.0 变更记录: [https://midscenejs.com/zh/changelog](https://midscenejs.com/zh/changelog)
 
+## 🔥 Python 版核心迁移快速体验
+
+1. 配置 `.env`（可参考 `.env.example`），填写模型 `base_url`、`api_key`、`family`、`model`、`httpproxy`。
+2. 安装依赖：`uv pip install -r mspy/requirements.txt`
+3. 运行示例：`uv run python quick.py`
+
 ## 案例
 
 在 Web 浏览器中自主注册 Github 表单，并通过所有字段校验。

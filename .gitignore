@@ -53,6 +53,7 @@ jspm_packages/
 # dotenv environment variables file
 .env
 .env.*
+!.env.example
 
 # next.js build output
 .next
@@ -101,6 +102,7 @@ iife-script/
 
 # Midscene.js dump files
 __ai_responses__/
+__pycache__/
 
 .nx/cache
 .nx/workspace-data
